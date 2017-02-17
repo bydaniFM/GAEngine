@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Audio">
+      <UniqueIdentifier>{9c286c56-6471-4caa-8ea4-101c4df6ec27}</UniqueIdentifier>
+      <Extensions>ogg;wav;flac;aiff;au;raw;paf;svx;nist;voc;ircam;w64;mat4;mat5;pvf;ftk;sds;avr;sd2;caf;wve;mpc2k;rf64;</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Fonts">
+      <UniqueIdentifier>{fc831592-9c8f-4839-b91d-81c88752c4da}</UniqueIdentifier>
+      <Extensions>ttf;tte;pfb;pfm;afm;otf;cff;otf;aat;sil;ccf;bdf;pcf;fnt;bdf;pfr;</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{fbefad78-cf6b-4b5a-be9e-6a3da68ff300}</UniqueIdentifier>
+      <Extensions>vert;frag;hlsl;cso;</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{14485659-9fa7-4a01-a828-866f5f069529}</UniqueIdentifier>
+      <Extensions>bmp;png;tga;jpg;gif;psd;hdr;pic;</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
