@@ -1,23 +1,30 @@
 #include <Windows.h>
-#include <SFML/Graphics.hpp>
+#include "Scene.h"
+#include "Sprite.h"
+#include "rapidxml-1.13/rapidxml.hpp"
 
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int)
-{
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
+	Event event;
+
+	bool isPressed = false;
+	GameEntity scene1;
+
+	RenderWindow window(VideoMode(640, 480), "IO", Style::Titlebar | Style::Close | !Style::Resize);
+	window.setFramerateLimit(60);
+	window.setMouseCursorVisible(true);
+
+	CircleShape shape(100.f);
+	shape.setFillColor(Color::Green);
+
+	while (window.isOpen()){
+		while (window.pollEvent(event)){
+			if (event.type == Event::Closed)
 				window.close();
 		}
 
 		window.clear();
-		window.draw(shape);
+		window.draw(&window);
 		window.display();
 	}
 
