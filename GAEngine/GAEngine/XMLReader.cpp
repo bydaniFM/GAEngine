@@ -18,13 +18,25 @@ XMLReader::XMLReader() {
 	}
 }
 
+//El bucle no funciona todavía correctamente
 char* XMLReader::Load(string name) {
-	//xml_node<> *child = node->first_node();
-	xml_attribute<> *attr = node->first_attribute();
-	for (xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()) {
-		if (node->value() == name) {
-			return attr->value();
-		}
+	xml_node<> *child = node->first_node();
+	xml_attribute<> *attr; // = node->first_attribute();
+	//char* route = "";
+	//for (xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()) {
+	while (node->next_sibling() == NULL) {
+		do{
+			if (child->first_attribute() != NULL) {
+				attr = child->first_attribute();
+				if (attr->value() == name) {
+					//route = child->value();
+					return child->value();
+					//return attr->value();
+				}
+			}
+			child = child->first_node();
+		} while (child->next_sibling() != NULL);
+		child = child->next_sibling();
 	}
 	
 	return NULL;
