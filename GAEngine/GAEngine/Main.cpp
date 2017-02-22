@@ -20,7 +20,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	//char* route = myReader.Load("background1");
 	//scene1.AddChild(new CSprite(route));
-	scene1.AddChild(new CSprite(myReader.Load("background1")));
+	scene1.AddChild(new CSprite(myReader.Load("background3")));
 	//scene1.AddChild(new CSprite("Resources/Textures/background1.png"));
 
 	while (window.isOpen()){
