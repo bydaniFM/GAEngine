@@ -3,7 +3,7 @@
 #include "Sprite.h"
 #include "XMLReader.h"
 
-void RefreshWindow(RenderWindow& window, GameEntity scene);
+void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -18,6 +18,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CSprite *background;
 	CSprite *player;
 
+	Font arial;
+	arial.loadFromFile("Resources/Fonts/Arial.ttf");
+	Text debug("Hi", arial, 12);
+	//debug.setColor(Color::Black);
+	debug.setFillColor(Color::Black);
+
+	int windowWidth = 640;	// In pixels
+	int windowHeight = 480;
 	int activeScene = 1;
 	bool isPressed = false;
 	float posX = 0;
@@ -27,23 +35,25 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	int speed = 5;
 	int levelLenght = 0;
 
-	RenderWindow window(VideoMode(640, 480), "GAEngine", Style::Titlebar | Style::Close | !Style::Resize);
+	RenderWindow window(VideoMode(windowWidth, windowHeight), "GAEngine", Style::Titlebar | Style::Close | !Style::Resize);
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(true);
 
 	/*CircleShape shape(100.f);
 	shape.setFillColor(Color::Green);*/
 
+	//debug = new Text();
+
 	//char* route = myReader.Load("background1");
 	//scene1.AddChild(new CSprite(route));
 	//scene1.AddChild(new CSprite("Resources/Textures/background1.png"));
-	background = new CSprite(myReader.Load("background4"));
+	background = new CSprite(myReader.Load("background1"));
 	background->Get()->setPosition(-10, 0);
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
 	player = new CSprite(myReader.Load("player"));
-	player->Get()->setPosition(300, 350);
+	player->Get()->setPosition(320, 350);
 	scene1.AddChild(player);
 
 	while (window.isOpen()){
@@ -58,18 +68,26 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		backgroundPosX = background->Get()->getPosition().x;
 		backgroundPosY = background->Get()->getPosition().y;
 
+		debug.setString("posX = " + std::to_string(posX) + "\n" + 
+						"posY = " + std::to_string(posY) + "\n" + 
+						"backgroundPosX = " + std::to_string(backgroundPosX) + "\n" + 
+						"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");
+
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			if (backgroundPosX - speed >= -levelLenght + 640) {
+			if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth/2) {
 				background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
-			}
+			} else if (posX <= windowWidth-player->Get()->getTextureRect().width) {
 				player->Get()->setPosition(posX + speed, posY);
+			}
 			/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
 				player->Get()->setPosition(posX + speed, posY);
 			}*/
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			if (backgroundPosX + speed <= 0) {
+			if (backgroundPosX + speed <= 0 && posX == windowWidth / 2) {
 				background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
+			} else if(posX >= 0) {
+				player->Get()->setPosition(posX - speed, posY);
 			}
 			/*if (backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
 				player->Get()->setPosition(posX - speed, posY);
@@ -79,16 +97,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 		switch (activeScene) {
 		case 1:
-			RefreshWindow(window, scene1);
+			RefreshWindow(window, scene1, debug);
 			break;
 		case 2:
-			RefreshWindow(window, scene2);
+			RefreshWindow(window, scene2, debug);
 			break;
 		case 3:
-			RefreshWindow(window, scene3);
+			RefreshWindow(window, scene3, debug);
 			break;
 		default:
-			RefreshWindow(window, menu);
+			RefreshWindow(window, menu, debug);
 			break;
 		}
 		/*window.clear();
@@ -99,8 +117,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	return 0;
 }
 
-void RefreshWindow(RenderWindow& window, GameEntity scene) {
+void RefreshWindow(RenderWindow& window, GameEntity scene, Text text) {
 	window.clear();
 	scene.Draw(&window);
+	window.draw(text);
 	window.display();
 }
