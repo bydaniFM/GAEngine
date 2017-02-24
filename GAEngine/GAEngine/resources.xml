@@ -5,6 +5,7 @@
     <image name="background2">Resources/Textures/background2.png</image>
     <image name="background3">Resources/Textures/background3.png</image>
     <image name="background4">Resources/Textures/background4.png</image>
+    <animation name="player">Resources/Textures/player.png</animation>
   </textures>
   <sounds>
     <sound name="exSound">assets/exSound.wav</sound>

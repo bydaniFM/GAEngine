@@ -16,11 +16,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene3;
 
 	CSprite *background;
+	CSprite *player;
 
 	int activeScene = 1;
 	bool isPressed = false;
 	float posX = 0;
 	float posY = 0;
+	float backgroundPosX = 0;
+	float backgroundPosY = 0;
 	int speed = 5;
 	int levelLenght = 0;
 
@@ -39,6 +42,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
+	player = new CSprite(myReader.Load("player"));
+	player->Get()->setPosition(300, 350);
+	scene1.AddChild(player);
+
 	while (window.isOpen()){
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed)
@@ -46,15 +53,28 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		}
 
 		// Movement
-		posX = background->Get()->getPosition().x;
-		posY = background->Get()->getPosition().y;
+		posX = player->Get()->getPosition().x;
+		posY = player->Get()->getPosition().y;
+		backgroundPosX = background->Get()->getPosition().x;
+		backgroundPosY = background->Get()->getPosition().y;
+
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			if (posX - speed >= -levelLenght+640)
-				background->Get()->setPosition(posX - speed, posY);
+			if (backgroundPosX - speed >= -levelLenght + 640) {
+				background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
+			}
+				player->Get()->setPosition(posX + speed, posY);
+			/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
+				player->Get()->setPosition(posX + speed, posY);
+			}*/
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			if (posX + speed <= 0)
-				background->Get()->setPosition(posX + speed, posY);
+			if (backgroundPosX + speed <= 0) {
+				background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
+			}
+			/*if (backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
+				player->Get()->setPosition(posX - speed, posY);
+			}*/
+			
 		}
 
 		switch (activeScene) {
