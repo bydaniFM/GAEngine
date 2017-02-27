@@ -6,6 +6,7 @@ using namespace std;
 GameEntity::GameEntity()
 {
 	m_pParent = NULL;
+	active = false;
 }
 
 void GameEntity::AddChild(ptr entity)

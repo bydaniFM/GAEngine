@@ -3,7 +3,7 @@
 #include "Sprite.h"
 #include "XMLReader.h"
 
-void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
+//void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -14,15 +14,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene1;
 	GameEntity scene2;
 	GameEntity scene3;
+	//GameEntity scenes[4] = { menu, scene1, scene2, scene3 };
+	/*scenes[0] = menu;
+	scenes[1] = scene1;
+	scenes[2] = scene2;
+	scenes[3] = scene3;*/
 
 	CSprite *background;
 	CSprite *player;
-
-	Font arial;
-	arial.loadFromFile("Resources/Fonts/Arial.ttf");
-	Text debug("Hi", arial, 12);
-	//debug.setColor(Color::Black);
-	debug.setFillColor(Color::Black);
 
 	int windowWidth = 640;	// In pixels
 	int windowHeight = 480;
@@ -47,8 +46,26 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	//char* route = myReader.Load("background1");
 	//scene1.AddChild(new CSprite(route));
 	//scene1.AddChild(new CSprite("Resources/Textures/background1.png"));
-	background = new CSprite(myReader.Load("background1"));
-	background->Get()->setPosition(-10, 0);
+
+	Font arial;
+	arial.loadFromFile("Resources/Fonts/Arial.ttf");
+	Text debug("Hi", arial, 12);
+	//debug.setColor(Color::Black);
+	debug.setFillColor(Color::Black);
+
+#pragma region Menu
+	//Vector2f menuSize(50, 100);
+	RectangleShape button1(Vector2f(50, 100));
+	//menu.AddChild(button1);
+	button1.setFillColor(Color::Green);
+	button1.setPosition(300, 300);
+
+#pragma endregion
+
+#pragma region Scene 1
+
+	background = new CSprite(myReader.Load("background4"));
+	//background->Get()->setPosition(-10, 0);
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
@@ -56,13 +73,20 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	player->Get()->setPosition(320, 350);
 	scene1.AddChild(player);
 
+#pragma endregion
+
+	scene1.active = true;
+	menu.active = true;
+
+	// Update loop
 	while (window.isOpen()){
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed)
 				window.close();
 		}
 
-		// Movement
+#pragma region Movement
+
 		posX = player->Get()->getPosition().x;
 		posY = player->Get()->getPosition().y;
 		backgroundPosX = background->Get()->getPosition().x;
@@ -95,7 +119,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			
 		}
 
-		switch (activeScene) {
+#pragma endregion
+
+#pragma region Draw Scenes
+
+		/*switch (activeScene) {
 		case 1:
 			RefreshWindow(window, scene1, debug);
 			break;
@@ -108,18 +136,30 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		default:
 			RefreshWindow(window, menu, debug);
 			break;
-		}
+		}*/
+
 		/*window.clear();
 		scene1.Draw(&window);
 		window.display();*/
+
+		GameEntity scenes[] = { scene1, scene2, scene3, menu };
+		window.clear();
+		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
+			if(scenes[i].active)
+				scenes[i].Draw(&window);
+		}
+		window.draw(debug);
+		window.display();
+
+#pragma endregion
 	}
 
 	return 0;
 }
 
-void RefreshWindow(RenderWindow& window, GameEntity scene, Text text) {
-	window.clear();
-	scene.Draw(&window);
-	window.draw(text);
-	window.display();
-}
+//void RefreshWindow(RenderWindow& window, GameEntity scene, Text text) {
+//	window.clear();
+//	scene.Draw(&window);
+//	window.draw(text);
+//	window.display();
+//}

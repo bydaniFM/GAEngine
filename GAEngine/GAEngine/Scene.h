@@ -18,6 +18,7 @@ class GameEntity
 public:
 	ptr				m_pParent;
 	vector<ptr>		m_Children;
+	bool			active;
 
 public:
 	GameEntity();
