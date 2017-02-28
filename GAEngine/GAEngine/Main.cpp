@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "Scene.h"
 #include "Sprite.h"
+#include "Text.h"
 #include "XMLReader.h"
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
@@ -60,6 +61,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	button1.setFillColor(Color::Green);
 	button1.setPosition(300, 300);
 
+	/*CSprite *menu_spr = new CSprite("Resources/Textures/menu_spr.png");
+	menu.AddChild(menu_spr);*/
+
+	CText *menuText;
+	menuText = new CText("Menu"); //myReader.Load("TextAlgo"));
+	menu.AddChild(menuText);
+
+	/*Text *menuText2;
+	menuText2 = new Text("Menu", arial, 24);
+	menu.AddChild(menuText2);*/
+
 #pragma endregion
 
 #pragma region Scene 1
@@ -75,7 +87,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 
-	scene1.active = true;
+	//scene1.active = true;
 	menu.active = true;
 
 	// Update loop
@@ -83,6 +95,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed)
 				window.close();
+
+			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+				isPressed = true;
+				if (menu.active)
+					menu.active = false;
+				else
+					menu.active = true;
+			}
 		}
 
 #pragma region Movement
@@ -148,6 +168,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if(scenes[i].active)
 				scenes[i].Draw(&window);
 		}
+		//menuText->Draw(&window);
 		window.draw(debug);
 		window.display();
 

@@ -165,6 +165,7 @@ robocopy "$(ProjectDir)Resources" "$(OutDir)Resources" /MIR</Command>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="XMLReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@ robocopy "$(ProjectDir)Resources" "$(OutDir)Resources" /MIR</Command>
   <ItemGroup>
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="XMLReader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
