@@ -162,7 +162,9 @@ robocopy "$(ProjectDir)Resources" "$(OutDir)Resources" /MIR</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -172,6 +174,8 @@ robocopy "$(ProjectDir)Resources" "$(OutDir)Resources" /MIR</Command>
     <Xml Include="resources.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
