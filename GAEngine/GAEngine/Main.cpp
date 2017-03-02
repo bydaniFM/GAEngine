@@ -5,6 +5,7 @@
 #include "XMLReader.h"
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
+bool checkButtonClicked(Vector2i mousePos, CSprite *button);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -12,14 +13,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	XMLReader myReader;
 
 	GameEntity menu;
+	GameEntity inventory;
+	GameEntity credits;
 	GameEntity scene1;
 	GameEntity scene2;
 	GameEntity scene3;
-	//GameEntity scenes[4] = { menu, scene1, scene2, scene3 };
-	/*scenes[0] = menu;
-	scenes[1] = scene1;
-	scenes[2] = scene2;
-	scenes[3] = scene3;*/
 
 	CSprite *background;
 	CSprite *player;
@@ -61,16 +59,25 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	button1.setFillColor(Color::Green);
 	button1.setPosition(300, 300);
 
-	/*CSprite *menu_spr = new CSprite("Resources/Textures/menu_spr.png");
-	menu.AddChild(menu_spr);*/
+	CSprite *menu_spr = new CSprite(myReader.Load("menu_spr"));
+	menu.AddChild(menu_spr);
+	menu_spr->Get()->setPosition(64, 80);
 
-	CText *menuText;
-	menuText = new CText("Menu"); //myReader.Load("TextAlgo"));
-	menu.AddChild(menuText);
+	CSprite *button_play_spr = new CSprite(myReader.Load("button_play"));
+	menu.AddChild(button_play_spr);
+	button_play_spr->Get()->setPosition(192, 169);
 
-	/*Text *menuText2;
-	menuText2 = new Text("Menu", arial, 24);
-	menu.AddChild(menuText2);*/
+	CSprite *button_credits_spr = new CSprite(myReader.Load("button_credits"));
+	menu.AddChild(button_credits_spr);
+	button_credits_spr->Get()->setPosition(192, 240);
+
+	CSprite *button_exit_spr = new CSprite(myReader.Load("button_exit"));
+	menu.AddChild(button_exit_spr);
+	button_exit_spr->Get()->setPosition(192, 311);
+
+	//CText *menuText;
+	//menuText = new CText("Menu"); //myReader.Load("TextAlgo"));
+	//menu.AddChild(menuText);
 
 #pragma endregion
 
@@ -87,10 +94,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 
-	//scene1.active = true;
 	menu.active = true;
+	//scene1.active = true;
 
-	// Update loop
+#pragma region Update Loop
+
 	while (window.isOpen()){
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed)
@@ -103,44 +111,59 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				else
 					menu.active = true;
 			}
+
+			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
+				if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
+					menu.active = false;
+					scene1.active = true;
+				} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
+					menu.active = false;
+					credits.active = true;
+				} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
+					window.close();
+				}
+			}
 		}
+
+		if (!menu.active && !inventory.active) {
 
 #pragma region Movement
 
-		posX = player->Get()->getPosition().x;
-		posY = player->Get()->getPosition().y;
-		backgroundPosX = background->Get()->getPosition().x;
-		backgroundPosY = background->Get()->getPosition().y;
+			posX = player->Get()->getPosition().x;
+			posY = player->Get()->getPosition().y;
+			backgroundPosX = background->Get()->getPosition().x;
+			backgroundPosY = background->Get()->getPosition().y;
 
-		debug.setString("posX = " + std::to_string(posX) + "\n" + 
-						"posY = " + std::to_string(posY) + "\n" + 
-						"backgroundPosX = " + std::to_string(backgroundPosX) + "\n" + 
-						"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");
+			debug.setString("posX = " + std::to_string(posX) + "\n" +
+				"posY = " + std::to_string(posY) + "\n" +
+				"backgroundPosX = " + std::to_string(backgroundPosX) + "\n" +
+				"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");
 
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth/2) {
-				background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
-			} else if (posX <= windowWidth-player->Get()->getTextureRect().width) {
-				player->Get()->setPosition(posX + speed, posY);
+			if (Keyboard::isKeyPressed(Keyboard::Right)) {
+				if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth / 2) {
+					background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
+				} else if (posX <= windowWidth - player->Get()->getTextureRect().width) {
+					player->Get()->setPosition(posX + speed, posY);
+				}
+				/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
+					player->Get()->setPosition(posX + speed, posY);
+				}*/
 			}
-			/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
-				player->Get()->setPosition(posX + speed, posY);
-			}*/
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			if (backgroundPosX + speed <= 0 && posX == windowWidth / 2) {
-				background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
-			} else if(posX >= 0) {
-				player->Get()->setPosition(posX - speed, posY);
+			if (Keyboard::isKeyPressed(Keyboard::Left)) {
+				if (backgroundPosX + speed <= 0 && posX == windowWidth / 2) {
+					background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
+				} else if (posX >= 0) {
+					player->Get()->setPosition(posX - speed, posY);
+				}
+				/*if (backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
+					player->Get()->setPosition(posX - speed, posY);
+				}*/
+
 			}
-			/*if (backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
-				player->Get()->setPosition(posX - speed, posY);
-			}*/
-			
-		}
 
 #pragma endregion
-
+		
+		}
 #pragma region Draw Scenes
 
 		/*switch (activeScene) {
@@ -174,7 +197,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 	}
-
+#pragma endregion
 	return 0;
 }
 
@@ -184,3 +207,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 //	window.draw(text);
 //	window.display();
 //}
+
+bool checkButtonClicked(Vector2i mousePosInt, CSprite *button) {
+	Vector2f mousePos((float)mousePosInt.x, (float)mousePosInt.y);
+	if (mousePos.x >= button->Get()->getPosition().x && mousePos.x <= button->Get()->getPosition().x + button->Get()->getTextureRect().width &&
+		mousePos.y >= button->Get()->getPosition().y && mousePos.y <= button->Get()->getPosition().y + button->Get()->getTextureRect().height) {
+		return true;
+	} else {
+		return false;
+	}
+}

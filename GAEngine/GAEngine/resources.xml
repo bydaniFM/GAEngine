@@ -5,6 +5,10 @@
     <image name="background2">Resources/Textures/background2.png</image>
     <image name="background3">Resources/Textures/background3.png</image>
     <image name="background4">Resources/Textures/background4.png</image>
+    <image name="menu_spr">Resources/Textures/menu_spr.png</image>
+    <image name="button_play">Resources/Textures/button_play.png</image>
+    <image name="button_credits">Resources/Textures/button_credits.png</image>
+    <image name="button_exit">Resources/Textures/button_exit.png</image>
     <animation name="player">Resources/Textures/player.png</animation>
   </textures>
   <sounds>
