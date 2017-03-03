@@ -1,3 +1,6 @@
+#ifndef __Object
+#define __Object
+
 class CObject {
 private:
 	char* name;
@@ -10,3 +13,5 @@ public:
 	char* getName();
 	bool getActive();
 };
+
+#endif // B_SPRITE

@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "Sprite.h"
 #include "Text.h"
+#include "Inventory.h"
+#include "Object.h"
 #include "XMLReader.h"
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
@@ -18,9 +20,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene1;
 	GameEntity scene2;
 	GameEntity scene3;
-
-	CSprite *background;
-	CSprite *player;
 
 	int windowWidth = 640;	// In pixels
 	int windowHeight = 480;
@@ -53,11 +52,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	debug.setFillColor(Color::Black);
 
 #pragma region Menu
-	//Vector2f menuSize(50, 100);
+	/*Vector2f menuSize(50, 100);
 	RectangleShape button1(Vector2f(50, 100));
-	//menu.AddChild(button1);
+	menu.AddChild(button1);
 	button1.setFillColor(Color::Green);
-	button1.setPosition(300, 300);
+	button1.setPosition(300, 300);*/
 
 	CSprite *menu_spr = new CSprite(myReader.Load("menu_spr"));
 	menu.AddChild(menu_spr);
@@ -81,13 +80,37 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 
+#pragma region Inventory
+
+	CSprite *inventory_spr = new CSprite(myReader.Load("inventory_spr"));
+	inventory.AddChild(inventory_spr);
+	inventory_spr->Get()->setPosition(64, 80);
+	CInventory *myInventory = new CInventory();
+
+	CSprite *obj_key = new CSprite(myReader.Load("obj_key"));
+	inventory.AddChild(obj_key);
+	obj_key->Get()->setPosition(300, 200);
+	CObject *key = new CObject("Key", true);
+	myInventory->Push(key);
+
+	CObject *map = new CObject("Map", true);
+	myInventory->Push(map);
+
+	CObject *stick = new CObject("Stick", true);
+	myInventory->Push(stick);
+	//myInventory->Pop(key);
+
+#pragma endregion
+
 #pragma region Scene 1
 
+	CSprite *background;
 	background = new CSprite(myReader.Load("background4"));
 	//background->Get()->setPosition(-10, 0);
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
+	CSprite *player;
 	player = new CSprite(myReader.Load("player"));
 	player->Get()->setPosition(320, 350);
 	scene1.AddChild(player);
@@ -105,11 +128,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				window.close();
 
 			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-				isPressed = true;
+				//isPressed = true;
 				if (menu.active)
 					menu.active = false;
 				else
 					menu.active = true;
+			}
+			if (event.type == Event::KeyPressed && event.key.code == Keyboard::I) {
+				if (inventory.active)
+					inventory.active = false;
+				else
+					inventory.active = true;
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
@@ -185,7 +214,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		scene1.Draw(&window);
 		window.display();*/
 
-		GameEntity scenes[] = { scene1, scene2, scene3, menu };
+		GameEntity scenes[] = { scene1, scene2, scene3, menu, inventory, credits };
 		window.clear();
 		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
 			if(scenes[i].active)
