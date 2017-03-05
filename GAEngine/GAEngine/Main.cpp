@@ -29,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	float posY = 0;
 	float backgroundPosX = 0;
 	float backgroundPosY = 0;
-	int speed = 5;
+	int speed = 3;
 	int levelLenght = 0;
 
 	RenderWindow window(VideoMode(windowWidth, windowHeight), "GAEngine", Style::Titlebar | Style::Close | !Style::Resize);
@@ -114,7 +114,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	player = new CSprite(myReader.Load("player"));*/
 	CAnimatedSprite *player;
 	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100);
-	player->Get()->setPosition(320, 350);
+	player->Get()->setOrigin(32, 32);
+	player->Get()->setPosition(windowWidth/2, 360);
 	scene1.AddChild(player);
 
 #pragma endregion
@@ -125,22 +126,45 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Update Loop
 
 	while (window.isOpen()){
+#pragma region Event management
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed)
 				window.close();
 
-			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-				//isPressed = true;
-				if (menu.active)
-					menu.active = false;
-				else
-					menu.active = true;
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::Escape) {
+					//isPressed = true;
+					if (menu.active)
+						menu.active = false;
+					else
+						menu.active = true;
+				}
+				if (event.key.code == Keyboard::I) {
+					if (inventory.active)
+						inventory.active = false;
+					else
+						inventory.active = true;
+				}
+				if (event.key.code == Keyboard::Right) {
+					if(!isPressed)
+						player->SetAnimation(1);
+				}
+				if (event.key.code == Keyboard::Left) {
+					if (!isPressed)
+						player->SetAnimation(2);
+				}
+				isPressed = true;
 			}
-			if (event.type == Event::KeyPressed && event.key.code == Keyboard::I) {
-				if (inventory.active)
-					inventory.active = false;
-				else
-					inventory.active = true;
+			
+			if (event.type == Event::KeyReleased) {
+				isPressed = false;
+				if (event.key.code == Keyboard::Right) {
+					player->SetAnimation(0);
+				}
+				if (event.key.code == Keyboard::Left) {
+					player->SetAnimation(0);
+				}
+				
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
@@ -155,10 +179,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				}
 			}
 		}
-
-		if (!menu.active && !inventory.active) {
-
+#pragma endregion
+		
 #pragma region Movement
+		if (!menu.active && !inventory.active) {
 
 			posX = player->Get()->getPosition().x;
 			posY = player->Get()->getPosition().y;
@@ -173,7 +197,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if (Keyboard::isKeyPressed(Keyboard::Right)) {
 				if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth / 2) {
 					background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
-				} else if (posX <= windowWidth - player->Get()->getTextureRect().width) {
+				} else if (posX <= windowWidth - player->Get()->getTextureRect().width/2) {
 					player->Get()->setPosition(posX + speed, posY);
 				}
 				/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
@@ -183,7 +207,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if (Keyboard::isKeyPressed(Keyboard::Left)) {
 				if (backgroundPosX + speed <= 0 && posX == windowWidth / 2) {
 					background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
-				} else if (posX >= 0) {
+				} else if (posX >= player->Get()->getTextureRect().width / 2) {
 					player->Get()->setPosition(posX - speed, posY);
 				}
 				/*if (backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {

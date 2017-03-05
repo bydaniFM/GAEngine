@@ -26,12 +26,13 @@ class CAnimatedSprite : public CSprite
 	int				m_nFrames;
 	int				m_nIndex;
 	int				m_nTime;
+	int				m_nAnimation;	//0->Idle	1->WalkRight	2->WalkLeft
 	Clock			timer;
 	IntRect			rect;
 
 public:
 	CAnimatedSprite(char *szFileName, int nFrames, int nTime);
-
+	void SetAnimation(int animation);
 	virtual void Draw(RenderWindow *window);
 };
 
