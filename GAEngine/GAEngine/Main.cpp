@@ -110,8 +110,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
-	CSprite *player;
-	player = new CSprite(myReader.Load("player"));
+	/*CSprite *player;
+	player = new CSprite(myReader.Load("player"));*/
+	CAnimatedSprite *player;
+	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100);
 	player->Get()->setPosition(320, 350);
 	scene1.AddChild(player);
 

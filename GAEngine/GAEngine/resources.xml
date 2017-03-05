@@ -11,7 +11,7 @@
     <image name="button_credits">Resources/Textures/button_credits.png</image>
     <image name="button_exit">Resources/Textures/button_exit.png</image>
     <image name="obj_key">Resources/Textures/obj_key.png</image>
-    <animation name="player">Resources/Textures/player.png</animation>
+    <animation name="anim_player">Resources/Textures/anim_player.png</animation>
   </textures>
   <sounds>
     <sound name="exSound">assets/exSound.wav</sound>
