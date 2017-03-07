@@ -21,8 +21,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene2;
 	GameEntity scene3;
 
-	int windowWidth = 640;	// In pixels
-	int windowHeight = 480;
+	int windowWidth = 128;// 640;	// In pixels
+	int windowHeight = 82;// 480;
 	int activeScene = 1;
 	bool isPressed = false;
 	float posX = 0;
@@ -105,7 +105,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Scene 1
 
 	CSprite *background;
-	background = new CSprite(myReader.Load("background4"));
+	background = new CSprite(myReader.Load("background5"));
 	//background->Get()->setPosition(-10, 0);
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
@@ -115,13 +115,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CAnimatedSprite *player;
 	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100);
 	player->Get()->setOrigin(32, 32);
-	player->Get()->setPosition(windowWidth/2, 360);
+	player->Get()->setPosition(windowWidth / 2, windowHeight - player->Get()->getTextureRect().height / 2);
 	scene1.AddChild(player);
 
 #pragma endregion
 
-	menu.active = true;
-	//scene1.active = true;
+	//menu.active = true;
+	scene1.active = true;
 
 #pragma region Update Loop
 
