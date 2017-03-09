@@ -43,12 +43,17 @@ void CAnimatedSprite::SetAnimation(int animation) {
 	if (animation == 0) {
 
 	}else if (animation == 1){
-		m_Sprite.setScale(1, 1);
+		m_Sprite.setScale(m_nScale, m_nScale);
 		//m_Sprite.setPosition(m_Sprite.getPosition() + Vector2f(m_Sprite.getTextureRect().width, 0));
 	} else if (animation == 2) {
-		m_Sprite.setScale(-1, 1);
+		m_Sprite.setScale(-m_nScale, m_nScale);
 		//m_Sprite.setPosition(m_Sprite.getPosition() + Vector2f(m_Sprite.getTextureRect().width, 0));
 	}
+}
+
+void CAnimatedSprite::SetScale(int scale) {
+	m_Sprite.setScale(scale, scale);
+	m_nScale = scale;
 }
 
 void CAnimatedSprite::Draw(RenderWindow *window)

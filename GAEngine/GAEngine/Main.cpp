@@ -8,6 +8,7 @@
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
+void moveScene(GameEntity scene, int speed);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -25,6 +26,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	int windowHeight = 480;
 	int activeScene = 1;
 	bool isPressed = false;
+	int playerScale = 6;
 	float posX = 0;
 	float posY = 0;
 	float backgroundPosX = 0;
@@ -105,7 +107,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Scene 1
 
 	CSprite *background;
-	background = new CSprite(myReader.Load("background4"));
+	background = new CSprite(myReader.Load("background5"));
 	//background->Get()->setPosition(-10, 0);
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
@@ -115,8 +117,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CAnimatedSprite *player;
 	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100);
 	player->Get()->setOrigin(32, 32);
-	player->Get()->setPosition(windowWidth/2, 360);
+	//player->Get()->setScale(4, 4);
+	player->SetScale(playerScale);
+	player->Get()->setPosition(windowWidth / 2, windowHeight - player->Get()->getTextureRect().height * (playerScale / 2));
 	scene1.AddChild(player);
+
+	CSprite *npc1;
+	npc1 = new CSprite(myReader.Load("npc1"));
+	scene1.AddChild(npc1);
+	npc1->Get()->setPosition(600, windowHeight - npc1->Get()->getTextureRect().height);
 
 #pragma endregion
 
@@ -197,6 +206,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if (Keyboard::isKeyPressed(Keyboard::Right)) {
 				if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth / 2) {
 					background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
+					//scene1.MoveScene(speed, "right");
 				} else if (posX <= windowWidth - player->Get()->getTextureRect().width/2) {
 					player->Get()->setPosition(posX + speed, posY);
 				}
@@ -271,4 +281,10 @@ bool checkButtonClicked(Vector2i mousePosInt, CSprite *button) {
 	} else {
 		return false;
 	}
+}
+
+void moveScene(GameEntity scene, int speed) {
+	/*for () {
+
+	}*/
 }
