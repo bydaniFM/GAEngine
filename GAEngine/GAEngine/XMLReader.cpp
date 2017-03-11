@@ -39,16 +39,14 @@ char* XMLReader::Load(string name) {
 	//} while (node->next_sibling() != NULL);
 
 	//xml_attribute<> *attr;
-	for (xml_node<> *child = node->first_node(); child->first_node() != NULL; child = child->first_node()) {
-		//attr = child->first_attribute();
-		for(xml_attribute<> *attr = child->first_attribute(); attr; attr = child->first_attribute()){
-		//while (attr) {//for (; attr; ) {
+	for (xml_node<> *parent = node; parent != NULL; parent = parent->next_sibling()) {
+		for (xml_node<> *child = parent->first_node(); child != NULL; child = child->next_sibling()) {
+			xml_attribute<> *attr = child->first_attribute();
 			if (attr->value() == name) {
 				return child->value();
 			}
-			child = child->next_sibling();
-			//attr = child->first_attribute();
 		}
+
 	}
 	
 	return NULL;
