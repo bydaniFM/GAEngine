@@ -52,13 +52,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	Text debug("Hi", arial, 12);
 	//debug.setColor(Color::Black);
 	debug.setFillColor(Color::Black);
-
+	/*
 #pragma region Menu
-	/*Vector2f menuSize(50, 100);
-	RectangleShape button1(Vector2f(50, 100));
-	menu.AddChild(button1);
-	button1.setFillColor(Color::Green);
-	button1.setPosition(300, 300);*/
+	//Vector2f menuSize(50, 100);
+	//RectangleShape button1(Vector2f(50, 100));
+	//menu.AddChild(button1);
+	//button1.setFillColor(Color::Green);
+	//button1.setPosition(300, 300);
 
 	CSprite *menu_spr = new CSprite(myReader.Load("menu_spr"));
 	menu.AddChild(menu_spr);
@@ -112,8 +112,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	scene1.AddChild(background);
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
-	/*CSprite *player;
-	player = new CSprite(myReader.Load("player"));*/
+	//CSprite *player;
+	//player = new CSprite(myReader.Load("player"));
 	CAnimatedSprite *player;
 	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100);
 	player->Get()->setOrigin(32, 32);
@@ -126,6 +126,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	npc1 = new CSprite(myReader.Load("npc1"));
 	scene1.AddChild(npc1);
 	npc1->Get()->setPosition(600, windowHeight - npc1->Get()->getTextureRect().height);
+
+#pragma endregion
+	*/
+#pragma region Scene 2
+
+	CSprite *bird;
+	bird = new CSprite(myReader.Load("player"));
+	scene1.AddChild(bird->Get());
 
 #pragma endregion
 

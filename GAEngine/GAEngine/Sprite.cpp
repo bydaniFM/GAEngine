@@ -20,9 +20,9 @@ void CSprite::Draw(RenderWindow *window)
 	GameEntity::Draw(window);
 }
 
-Sprite *CSprite::Get(void)
+Sprite CSprite::Get(void)
 {
-	return(&m_Sprite);
+	return(m_Sprite);
 }
 
 // -------------------------------------------------------

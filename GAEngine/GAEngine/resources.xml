@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <textures>
+	<image name="player">Resources/Textures/player.png</image>
 	<image name="background1">Resources/Textures/background1.png</image>
 	<image name="background2">Resources/Textures/background2.png</image>
 	<image name="background3">Resources/Textures/background3.png</image>

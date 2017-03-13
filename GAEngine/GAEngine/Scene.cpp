@@ -10,15 +10,11 @@ GameEntity::GameEntity()
 	active = false;
 }
 
-//void GameEntity::MoveScene(int speed, char* dir) {
-//	int j = 0
-//	for (vector<ptr>::iterator i = m_Children.begin(); i < m_Children.end(); i++) {
-//		if (dir == "right") {
-//			//m_CSprite->Get()->SetPosition(m_CSprite->Get()->GetPosition().x - speed, m_CSprite->Get()->GetPosition().y);
-//		}
-//		j++;
-//	}
-//}
+void GameEntity::MoveScene(int speed) {
+	for (vector<CSprite>::iterator i = m_Sprites.begin(); i < m_Sprites.end(); i++) {
+		i->Get().setPosition(i->Get().getPosition().x - speed, i->Get().getPosition().y);
+	}
+}
 
 //CSprite* GameEntity::GetChildren() {
 //	CSprite *spriteArr;
@@ -35,9 +31,17 @@ void GameEntity::AddChild(ptr entity)
 	//m_CSprite = entity;
 }
 
+void GameEntity::AddChild(CSprite sprite) {
+	m_Sprites.push_back(sprite);
+}
+
 void GameEntity::Draw(RenderWindow *window)
 {
 	for (vector<ptr>::iterator i = m_Children.begin(); i < m_Children.end(); i++) {
 		(*i)->Draw(window);
+	}
+	for (vector<CSprite>::iterator i = m_Sprites.begin(); i < m_Sprites.end(); i++) {
+		//window->draw((*i).Get());
+		window->draw(i->Get());
 	}
 }

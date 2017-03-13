@@ -16,7 +16,7 @@ public:
 	CSprite(char *szFileName);
 
 	virtual void Draw(RenderWindow *window);
-	Sprite *CSprite::Get(void);
+	Sprite CSprite::Get(void);
 };
 
 // ------------------------------------------------------------

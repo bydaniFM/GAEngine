@@ -21,14 +21,22 @@ public:
 	vector<ptr>		m_Children;
 	bool			active;
 	//CSprite			*m_CSprite;
+	vector<CSprite>	m_Sprites;
 
 public:
 	GameEntity();
 
-	//void MoveScene(int speed, char* dir);
-	//CSprite* GetChildren();
 	void AddChild(ptr);
+	void AddChild(CSprite sprite);
 	virtual void Draw(RenderWindow *window);
+
+	void MoveScene(int speed);
+	//CSprite* GetChildren();
 };
 
 #endif  // __SCENE
+
+//class Scene {
+//private:
+//	vector
+//};
