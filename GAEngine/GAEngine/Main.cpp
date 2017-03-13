@@ -204,11 +204,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");
 
 			if (Keyboard::isKeyPressed(Keyboard::Right)) {
+				//scene1.Move(-speed);
+				scene1.MoveBut(-speed, player);
 				if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth / 2) {
-					background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
-					//scene1.MoveScene(speed, "right");
+					//background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
+					
 				} else if (posX <= windowWidth - player->Get()->getTextureRect().width/2) {
-					player->Get()->setPosition(posX + speed, posY);
+					//player->Get()->setPosition(posX + speed, posY);
 				}
 				/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
 					player->Get()->setPosition(posX + speed, posY);

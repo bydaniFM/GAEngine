@@ -16,7 +16,10 @@ public:
 	CSprite(char *szFileName);
 
 	virtual void Draw(RenderWindow *window);
-	Sprite *CSprite::Get(void);
+	virtual Sprite *CSprite::Get(void);
+
+	virtual void Move(int speed);
+	virtual void MoveBut(int speed, ptr);
 };
 
 // ------------------------------------------------------------

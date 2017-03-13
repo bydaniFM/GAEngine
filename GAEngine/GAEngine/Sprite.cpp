@@ -25,6 +25,16 @@ Sprite *CSprite::Get(void)
 	return(&m_Sprite);
 }
 
+void CSprite::Move(int speed) {
+	m_Sprite.setPosition(m_Sprite.getPosition().x + speed, m_Sprite.getPosition().y);
+	GameEntity::Move(speed);
+}
+
+void CSprite::MoveBut(int speed, ptr entity) {
+	m_Sprite.setPosition(m_Sprite.getPosition().x + speed, m_Sprite.getPosition().y);
+	GameEntity::MoveBut(speed, entity);
+}
+
 // -------------------------------------------------------
 
 CAnimatedSprite::CAnimatedSprite(char *szFileName, int nFrames, int nTime) : CSprite(szFileName)

@@ -25,10 +25,12 @@ public:
 public:
 	GameEntity();
 
-	//void MoveScene(int speed, char* dir);
 	//CSprite* GetChildren();
 	void AddChild(ptr);
 	virtual void Draw(RenderWindow *window);
+	virtual void Move(int speed);
+	virtual void MoveBut(int speed, ptr);
+	virtual Sprite *GameEntity::Get(ptr);
 };
 
 #endif  // __SCENE
