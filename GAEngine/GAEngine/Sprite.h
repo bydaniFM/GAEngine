@@ -10,16 +10,19 @@ class CSprite : public GameEntity
 protected:
 	Texture			m_Texture;
 	Sprite			m_Sprite;
+	bool			canMove;	//If the sprite can move in the window. Player should be false
 
 public:
 	CSprite();
 	CSprite(char *szFileName);
+	CSprite(char *szFileName, bool canMove);
 
 	virtual void Draw(RenderWindow *window);
-	virtual Sprite *CSprite::Get(void);
+	Sprite *CSprite::Get(void);
 
 	virtual void Move(int speed);
-	virtual void MoveBut(int speed, ptr);
+
+	bool getCanMoove();
 };
 
 // ------------------------------------------------------------
@@ -35,7 +38,7 @@ class CAnimatedSprite : public CSprite
 	IntRect			rect;
 
 public:
-	CAnimatedSprite(char *szFileName, int nFrames, int nTime);
+	CAnimatedSprite(char *szFileName, int nFrames, int nTime, bool canMove);
 	void SetAnimation(int animation);
 	void SetScale(int scale);
 	virtual void Draw(RenderWindow *window);

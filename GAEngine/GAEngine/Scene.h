@@ -21,16 +21,16 @@ public:
 	vector<ptr>		m_Children;
 	bool			active;
 	//CSprite			*m_CSprite;
+	bool			canMove;
 
 public:
 	GameEntity();
 
 	//CSprite* GetChildren();
 	void AddChild(ptr);
+	void AddChild(ptr, bool canMove);
 	virtual void Draw(RenderWindow *window);
 	virtual void Move(int speed);
-	virtual void MoveBut(int speed, ptr);
-	virtual Sprite *GameEntity::Get(ptr);
 };
 
 #endif  // __SCENE

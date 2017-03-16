@@ -12,6 +12,14 @@ CSprite::CSprite(char *szFileName)
 	if (m_Texture.loadFromFile(szFileName)) {
 		m_Sprite.setTexture(m_Texture);
 	}
+	canMove = true;
+}
+
+CSprite::CSprite(char *szFileName, bool canMove) {
+	if (m_Texture.loadFromFile(szFileName)) {
+		m_Sprite.setTexture(m_Texture);
+	}
+	this->canMove = canMove;
 }
 
 void CSprite::Draw(RenderWindow *window)
@@ -26,18 +34,18 @@ Sprite *CSprite::Get(void)
 }
 
 void CSprite::Move(int speed) {
-	m_Sprite.setPosition(m_Sprite.getPosition().x + speed, m_Sprite.getPosition().y);
+	if(canMove)
+		m_Sprite.setPosition(m_Sprite.getPosition().x + speed, m_Sprite.getPosition().y);
 	GameEntity::Move(speed);
 }
 
-void CSprite::MoveBut(int speed, ptr entity) {
-	m_Sprite.setPosition(m_Sprite.getPosition().x + speed, m_Sprite.getPosition().y);
-	GameEntity::MoveBut(speed, entity);
+bool CSprite::getCanMoove() {
+	return canMove;
 }
 
 // -------------------------------------------------------
 
-CAnimatedSprite::CAnimatedSprite(char *szFileName, int nFrames, int nTime) : CSprite(szFileName)
+CAnimatedSprite::CAnimatedSprite(char *szFileName, int nFrames, int nTime, bool canMove) : CSprite(szFileName)
 {
 	m_nFrames = nFrames;
 	m_nTime = nTime;
@@ -46,6 +54,8 @@ CAnimatedSprite::CAnimatedSprite(char *szFileName, int nFrames, int nTime) : CSp
 	timer.restart();
 
 	rect = m_Sprite.getTextureRect();
+
+	this->canMove = canMove;
 }
 
 void CAnimatedSprite::SetAnimation(int animation) {

@@ -8,7 +8,6 @@
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
-void moveScene(GameEntity scene, int speed);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -21,10 +20,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene1;
 	GameEntity scene2;
 	GameEntity scene3;
+	GameEntity *activeScene;
 
 	int windowWidth = 640;	// In pixels
 	int windowHeight = 480;
-	int activeScene = 1;
 	bool isPressed = false;
 	int playerScale = 6;
 	float posX = 0;
@@ -115,12 +114,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	/*CSprite *player;
 	player = new CSprite(myReader.Load("player"));*/
 	CAnimatedSprite *player;
-	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100);
+	player = new CAnimatedSprite(myReader.Load("anim_player"), 8, 100, false);
 	player->Get()->setOrigin(32, 32);
 	//player->Get()->setScale(4, 4);
 	player->SetScale(playerScale);
 	player->Get()->setPosition(windowWidth / 2, windowHeight - player->Get()->getTextureRect().height * (playerScale / 2));
-	scene1.AddChild(player);
+	scene1.AddChild(player, false);
 
 	CSprite *npc1;
 	npc1 = new CSprite(myReader.Load("npc1"));
@@ -131,6 +130,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	menu.active = true;
 	//scene1.active = true;
+
+	activeScene = &scene1;
 
 #pragma region Update Loop
 
@@ -179,7 +180,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
 				if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
 					menu.active = false;
-					scene1.active = true;
+					activeScene->active = true;
 				} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
 					menu.active = false;
 					credits.active = true;
@@ -204,13 +205,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");
 
 			if (Keyboard::isKeyPressed(Keyboard::Right)) {
-				//scene1.Move(-speed);
-				scene1.MoveBut(-speed, player);
 				if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth / 2) {
 					//background->Get()->setPosition(backgroundPosX - speed, backgroundPosY);
-					
+					activeScene->Move(-speed);					
 				} else if (posX <= windowWidth - player->Get()->getTextureRect().width/2) {
-					//player->Get()->setPosition(posX + speed, posY);
+					player->Get()->setPosition(posX + speed, posY);
 				}
 				/*if(backgroundPosX >= -levelLenght + 320 || backgroundPosX <= 320) {
 					player->Get()->setPosition(posX + speed, posY);
@@ -218,7 +217,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Left)) {
 				if (backgroundPosX + speed <= 0 && posX == windowWidth / 2) {
-					background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
+					//background->Get()->setPosition(backgroundPosX + speed, backgroundPosY);
+					activeScene->Move(speed);
 				} else if (posX >= player->Get()->getTextureRect().width / 2) {
 					player->Get()->setPosition(posX - speed, posY);
 				}
@@ -252,7 +252,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		scene1.Draw(&window);
 		window.display();*/
 
-		GameEntity scenes[] = { scene1, scene2, scene3, menu, inventory, credits };
+		/*GameEntity scenes[] = { scene1, scene2, scene3, menu, inventory, credits };*/
+		GameEntity scenes[] = { *activeScene, menu, inventory, credits };
 		window.clear();
 		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
 			if(scenes[i].active)
@@ -283,10 +284,4 @@ bool checkButtonClicked(Vector2i mousePosInt, CSprite *button) {
 	} else {
 		return false;
 	}
-}
-
-void moveScene(GameEntity scene, int speed) {
-	/*for () {
-
-	}*/
 }
