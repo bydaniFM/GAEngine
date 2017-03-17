@@ -8,6 +8,8 @@
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
+bool checkCollision(CSprite a, CSprite b);
+bool checkCollision(CAnimatedSprite *a, CSprite *b);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -230,6 +232,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 		
+			if (checkCollision(player, npc1)) {
+				menu.active = true;
+			}
+
 		}
 #pragma region Draw Scenes
 
@@ -269,13 +275,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	return 0;
 }
 
-//void RefreshWindow(RenderWindow& window, GameEntity scene, Text text) {
-//	window.clear();
-//	scene.Draw(&window);
-//	window.draw(text);
-//	window.display();
-//}
-
 bool checkButtonClicked(Vector2i mousePosInt, CSprite *button) {
 	Vector2f mousePos((float)mousePosInt.x, (float)mousePosInt.y);
 	if (mousePos.x >= button->Get()->getPosition().x && mousePos.x <= button->Get()->getPosition().x + button->Get()->getTextureRect().width &&
@@ -285,3 +284,37 @@ bool checkButtonClicked(Vector2i mousePosInt, CSprite *button) {
 		return false;
 	}
 }
+
+bool checkCollision(CSprite *a, CSprite *b) {
+	FloatRect rectA = a->Get()->getGlobalBounds();
+	FloatRect rectB = b->Get()->getGlobalBounds();
+
+	if (rectA.left >= rectB.left)
+		return true;
+	else
+		return false;
+}
+
+bool checkCollision(CAnimatedSprite *a, CSprite *b) {
+	FloatRect rectA = a->Get()->getGlobalBounds();
+	FloatRect rectB = b->Get()->getGlobalBounds();
+
+	if (rectA.left + rectA.width/8 >= rectB.left)
+		return true;
+	else
+		return false;
+}
+
+//bool checkCollision(CSprite *a, CSprite *b) {
+//	if (a->Get()->getGlobalBounds().intersects(b->Get()->getGlobalBounds()))
+//		return true;
+//	else
+//		return false;
+//}
+//
+//bool checkCollision(CAnimatedSprite *a, CSprite *b) {
+//	if (a->Get()->getGlobalBounds().intersects(b->Get()->getGlobalBounds()))
+//		return true;
+//	else
+//		return false;
+//}

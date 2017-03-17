@@ -21,6 +21,7 @@ public:
 	Sprite *CSprite::Get(void);
 
 	virtual void Move(int speed);
+	//FloatRect getBoundingRect() const;
 
 	bool getCanMoove();
 };

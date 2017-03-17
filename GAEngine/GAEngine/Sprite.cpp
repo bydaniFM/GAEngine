@@ -43,6 +43,10 @@ bool CSprite::getCanMoove() {
 	return canMove;
 }
 
+//FloatRect CSprite::getBoundingRect() const {
+//	return getWorldTransform().transformRect(m_Sprite.getGlobalBounds());
+//}
+
 // -------------------------------------------------------
 
 CAnimatedSprite::CAnimatedSprite(char *szFileName, int nFrames, int nTime, bool canMove) : CSprite(szFileName)
