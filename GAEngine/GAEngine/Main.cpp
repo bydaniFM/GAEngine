@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Sprite.h"
 #include "Text.h"
+//#include "Dialogue.h"
 #include "Inventory.h"
 #include "Object.h"
 #include "XMLReader.h"
@@ -55,6 +56,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	arial.loadFromFile("Resources/Fonts/Arial.ttf");
 	//Text debug("Hi", arial, 12);
 	debug.setFillColor(Color::Black);
+
+	//Dialogue myDialogue("1_01", myReader);
 
 #pragma region Menu
 	/*Vector2f menuSize(50, 100);
@@ -272,6 +275,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if(scenes[i].active)
 				scenes[i].Draw(&window);
 		}
+		//window.draw(myDialogue.getText());
 		//menuText->Draw(&window);
 		window.draw(debug);
 		window.display();
