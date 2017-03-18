@@ -11,6 +11,9 @@ bool checkButtonClicked(Vector2i mousePos, CSprite *button);
 bool checkCollision(CSprite a, CSprite b);
 bool checkCollision(CAnimatedSprite *a, CSprite *b);
 
+Font arial;
+Text debug("Hi", arial, 12);
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	Event event;
@@ -48,10 +51,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	//scene1.AddChild(new CSprite(route));
 	//scene1.AddChild(new CSprite("Resources/Textures/background1.png"));
 
-	Font arial;
+	//Font arial;
 	arial.loadFromFile("Resources/Fonts/Arial.ttf");
-	Text debug("Hi", arial, 12);
-	//debug.setColor(Color::Black);
+	//Text debug("Hi", arial, 12);
 	debug.setFillColor(Color::Black);
 
 #pragma region Menu
@@ -128,6 +130,11 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	scene1.AddChild(npc1);
 	npc1->Get()->setPosition(600, windowHeight - npc1->Get()->getTextureRect().height);
 
+	CSprite *npc2;
+	npc2 = new CSprite(myReader.Load("npc1"));
+	scene1.AddChild(npc2);
+	npc2->Get()->setPosition(32, windowHeight - npc2->Get()->getTextureRect().height);
+
 #pragma endregion
 
 	menu.active = true;
@@ -201,10 +208,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			backgroundPosX = background->Get()->getPosition().x;
 			backgroundPosY = background->Get()->getPosition().y;
 
-			debug.setString("posX = " + std::to_string(posX) + "\n" +
+			/*debug.setString("posX = " + std::to_string(posX) + "\n" +
 				"posY = " + std::to_string(posY) + "\n" +
 				"backgroundPosX = " + std::to_string(backgroundPosX) + "\n" +
-				"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");
+				"backgroundPosY = " + std::to_string(backgroundPosY) + "\n");*/
 
 			if (Keyboard::isKeyPressed(Keyboard::Right)) {
 				if (backgroundPosX - speed >= -levelLenght + windowWidth && posX == windowWidth / 2) {
@@ -232,7 +239,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 		
-			if (checkCollision(player, npc1)) {
+			if (checkCollision(player, npc2)) {
 				menu.active = true;
 			}
 
@@ -299,7 +306,10 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 	FloatRect rectA = a->Get()->getGlobalBounds();
 	FloatRect rectB = b->Get()->getGlobalBounds();
 
-	if (rectA.left + rectA.width/8 >= rectB.left)
+	debug.setString("\nPos A = " + std::to_string(rectA.left) + "\n" +
+		"Pos B = " + std::to_string(rectB.left - rectB.width) + "\n");
+
+	if (rectA.left >= rectB.left - rectB.width && rectA.left <= rectB.left)
 		return true;
 	else
 		return false;
