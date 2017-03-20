@@ -5,11 +5,12 @@
 
 class CText : public GameEntity {
 protected:
+	Font Arial;
 	string s_text;
-	Text t_text;
+	Text *t_text;
 public:
 	CText();
-	CText(char *szFileName);
+	CText(char *szFileName, Font f_font, int size);
 	virtual void Draw(RenderWindow *window);
 	Text *CText::Get(void);
 };

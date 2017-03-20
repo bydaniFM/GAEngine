@@ -6,35 +6,33 @@ using namespace std;
 
 GameEntity::GameEntity()
 {
-	m_pParent = NULL;
+	spr_Parent = NULL;
 	active = false;
 }
 
-void GameEntity::AddChild(ptr entity)
+void GameEntity::AddChild(ptr entity, char* type)
 {
-	m_Children.push_back(entity);
-	entity->m_pParent = this;
-
-	canMove = true;
-}
-
-void GameEntity::AddChild(ptr entity, bool canMove)
-{
-	m_Children.push_back(entity);
-	entity->m_pParent = this;
-
-	this->canMove = canMove;
+	if (type == "CSprite") {
+		spr_Children.push_back(entity);
+		entity->spr_Parent = this;
+	} else {
+		txt_Children.push_back(entity);
+		entity->txt_Parent = this;
+	}
 }
 
 void GameEntity::Draw(RenderWindow *window)
 {
-	for (vector<ptr>::iterator i = m_Children.begin(); i < m_Children.end(); i++) {
+	for (vector<ptr>::iterator i = spr_Children.begin(); i < spr_Children.end(); i++) {
+		(*i)->Draw(window);
+	}
+	for (vector<ptr>::iterator i = txt_Children.begin(); i < txt_Children.end(); i++) {
 		(*i)->Draw(window);
 	}
 }
 
 void GameEntity::Move(int speed) {
-	for (vector<ptr>::iterator i = m_Children.begin(); i < m_Children.end(); i++) {
+	for (vector<ptr>::iterator i = spr_Children.begin(); i < spr_Children.end(); i++) {
 		(*i)->Move(speed);
 	}
 }

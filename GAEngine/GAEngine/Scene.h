@@ -17,18 +17,18 @@ typedef GameEntity*	ptr;
 class GameEntity
 {
 public:
-	ptr				m_pParent;
-	vector<ptr>		m_Children;
+	ptr				spr_Parent;
+	vector<ptr>		spr_Children;
+	ptr				txt_Parent;
+	vector<ptr>		txt_Children;
+
 	bool			active;
-	//CSprite			*m_CSprite;
-	bool			canMove;
 
 public:
 	GameEntity();
 
 	//CSprite* GetChildren();
-	void AddChild(ptr);
-	void AddChild(ptr, bool canMove);
+	void AddChild(ptr, char* type);
 	virtual void Draw(RenderWindow *window);
 	virtual void Move(int speed);
 };

@@ -12,8 +12,8 @@ bool checkButtonClicked(Vector2i mousePos, CSprite *button);
 bool checkCollision(CSprite a, CSprite b);
 bool checkCollision(CAnimatedSprite *a, CSprite *b);
 
-Font arial;
-Text debug("Hi", arial, 12);
+Font Arial;
+Text debug("Hi", Arial, 12);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -43,43 +43,27 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(true);
 
-	/*CircleShape shape(100.f);
-	shape.setFillColor(Color::Green);*/
-
-	//debug = new Text();
-
-	//char* route = myReader.Load("background1");
-	//scene1.AddChild(new CSprite(route));
-	//scene1.AddChild(new CSprite("Resources/Textures/background1.png"));
-
-	//Font arial;
-	arial.loadFromFile("Resources/Fonts/Arial.ttf");
-	//Text debug("Hi", arial, 12);
+	//Font Arial;
+	Arial.loadFromFile("Resources/Fonts/Arial.ttf");
+	//Text debug("Hi", Arial, 12);
 	debug.setFillColor(Color::Black);
 
-	//Dialogue myDialogue("1_01", myReader);
-
 #pragma region Menu
-	/*Vector2f menuSize(50, 100);
-	RectangleShape button1(Vector2f(50, 100));
-	menu.AddChild(button1);
-	button1.setFillColor(Color::Green);
-	button1.setPosition(300, 300);*/
 
 	CSprite *menu_spr = new CSprite(myReader.Load("menu_spr"));
-	menu.AddChild(menu_spr);
+	menu.AddChild(menu_spr, "CSprite");
 	menu_spr->Get()->setPosition(64, 80);
 
 	CSprite *button_play_spr = new CSprite(myReader.Load("button_play"));
-	menu.AddChild(button_play_spr);
+	menu.AddChild(button_play_spr, "CSprite");
 	button_play_spr->Get()->setPosition(192, 169);
 
 	CSprite *button_credits_spr = new CSprite(myReader.Load("button_credits"));
-	menu.AddChild(button_credits_spr);
+	menu.AddChild(button_credits_spr, "CSprite");
 	button_credits_spr->Get()->setPosition(192, 240);
 
 	CSprite *button_exit_spr = new CSprite(myReader.Load("button_exit"));
-	menu.AddChild(button_exit_spr);
+	menu.AddChild(button_exit_spr, "CSprite");
 	button_exit_spr->Get()->setPosition(192, 311);
 
 	//CText *menuText;
@@ -91,12 +75,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Inventory
 
 	CSprite *inventory_spr = new CSprite(myReader.Load("inventory_spr"));
-	inventory.AddChild(inventory_spr);
+	inventory.AddChild(inventory_spr, "CSprite");
 	inventory_spr->Get()->setPosition(64, 80);
 	CInventory *myInventory = new CInventory();
 
 	CSprite *obj_key = new CSprite(myReader.Load("obj_key"));
-	inventory.AddChild(obj_key);
+	inventory.AddChild(obj_key, "CSprite");
 	obj_key->Get()->setPosition(300, 200);
 	CObject *key = new CObject("Key", true);
 	myInventory->Push(key);
@@ -115,7 +99,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CSprite *background;
 	background = new CSprite(myReader.Load("background5"));
 	//background->Get()->setPosition(-10, 0);
-	scene1.AddChild(background);
+	scene1.AddChild(background, "CSprite");
 	levelLenght = background->Get()->getTexture()->getSize().x;
 
 	/*CSprite *player;
@@ -126,17 +110,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	//player->Get()->setScale(4, 4);
 	player->SetScale(playerScale);
 	player->Get()->setPosition(windowWidth / 2, windowHeight - player->Get()->getTextureRect().height * (playerScale / 2));
-	scene1.AddChild(player, false);
+	scene1.AddChild(player, "CSprite");
 
 	CSprite *npc1;
 	npc1 = new CSprite(myReader.Load("npc1"));
-	scene1.AddChild(npc1);
+	scene1.AddChild(npc1, "CSprite");
 	npc1->Get()->setPosition(600, windowHeight - npc1->Get()->getTextureRect().height);
 
 	CSprite *npc2;
 	npc2 = new CSprite(myReader.Load("npc1"));
-	scene1.AddChild(npc2);
+	scene1.AddChild(npc2, "CSprite");
 	npc2->Get()->setPosition(32, windowHeight - npc2->Get()->getTextureRect().height);
+
+
+	/*CText *ttext = new CText(myReader.Load("1_01"), Arial);
+	scene1.AddChild(ttext, "CText");
+	ttext->Get()->setFillColor(Color::White);*/
 
 #pragma endregion
 
@@ -243,7 +232,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma endregion
 		
 			if (checkCollision(player, npc2)) {
-				menu.active = true;
+				//menu.active = true;
+				CText *ttext = new CText(myReader.Load("1_01"), Arial, 24);
+				scene1.AddChild(ttext, "CText");
+				ttext->Get()->setFillColor(Color::White);
 			}
 
 		}
