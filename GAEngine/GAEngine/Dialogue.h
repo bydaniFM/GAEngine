@@ -4,21 +4,21 @@
 #include <windows.h>
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "XMLReader.h"
+#include "Text.h"
 
 using namespace sf;
 
 class Dialogue {
 private:
-	Text *t_text;
-	string s_name;
+	CText *t_Text;
+	vector<CText> t_Children;
 	int index;
-	Font Arial;
 public:
 	Dialogue();
-	Dialogue(char* name, XMLReader myReader);
-	Text NextLine();
-	Text getText();
+	//Dialogue(int index);
+	void AddText(CText t_text);
+	CText NextLine();
+	CText getText();
 };
 
 #endif // !__DIALOGUE

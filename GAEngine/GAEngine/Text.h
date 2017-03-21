@@ -1,5 +1,5 @@
-//#ifndef __TEXT
-//#define __TEXT
+#ifndef __CTEXT
+#define __CTEXT
 
 #include "Scene.h"
 
@@ -14,4 +14,4 @@ public:
 	virtual void Draw(RenderWindow *window);
 	Text *CText::Get(void);
 };
-//#endif //B_Text
+#endif //B_CText

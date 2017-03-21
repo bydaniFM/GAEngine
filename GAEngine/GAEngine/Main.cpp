@@ -1,24 +1,28 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 #include "Scene.h"
 #include "Sprite.h"
 #include "Text.h"
-//#include "Dialogue.h"
+#include "Dialogue.h"
 #include "Inventory.h"
 #include "Object.h"
 #include "XMLReader.h"
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
-bool checkCollision(CSprite a, CSprite b);
+//bool checkCollision(CSprite a, CSprite b);
 bool checkCollision(CAnimatedSprite *a, CSprite *b);
+Dialogue createDialogue(string route);
 
 Font Arial;
 Text debug("Hi", Arial, 12);
 
+XMLReader myReader;
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	Event event;
-	XMLReader myReader;
+	//XMLReader myReader;
 
 	GameEntity menu;
 	GameEntity inventory;
@@ -27,6 +31,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene2;
 	GameEntity scene3;
 	GameEntity *activeScene;
+
+	//CText textArr[3];
 
 	int windowWidth = 640;	// In pixels
 	int windowHeight = 480;
@@ -309,6 +315,31 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 		return true;
 	else
 		return false;
+}
+
+Dialogue createDialogue(string route) {
+	Dialogue *myDialogue = new Dialogue();
+	CText *text;
+	string routeHead = route;
+	route.pop_back();
+	string str;
+	char* cstr;
+	bool condition = false;
+	for (int i = routeHead.back(); !condition; i++) {//(str.c_str(), str.c_str() + str.size() + 1)
+		str = route + to_string(i);
+		cstr = new char[str.length() + 1];
+		strcpy(cstr, str.c_str());
+
+		text = new CText(myReader.Load(route + to_string(i)), Arial, 16);
+		myDialogue->AddText(*text);
+
+		if (myReader.Load(cstr) != NULL)
+			condition = true;
+
+		delete[] cstr;
+	}
+	//delete[] cstr;
+	return *myDialogue;
 }
 
 //bool checkCollision(CSprite *a, CSprite *b) {
