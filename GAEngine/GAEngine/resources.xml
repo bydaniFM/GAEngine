@@ -13,11 +13,14 @@
 	<image name="obj_key">Resources/Textures/obj_key.png</image>
 	<animation name="anim_player">Resources/Textures/anim_player.png</animation>
 	<image name="npc1">Resources/Textures/npc1.png</image>
+	<image name="DialogueBox">Resources/Textures/DialogueBox.png</image>
+	<image name="button_next">Resources/Textures/button_next.png</image>
 </textures>
 <sounds>
 	<sound name="exSound">assets/exSound.wav</sound>
 </sounds>
 <texts>
 	<text id="1_01">Hello. Is it your first day, isn't it?</text>
-	<text id="1_02">Go talk to the boss, he'll tell you what to do.</text>
+	<text id="1_02">I hope you are getting along with everyone.</text>
+	<text id="1_01">Go talk to the boss, he'll tell you what to do.</text>
 </texts>

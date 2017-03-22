@@ -11,6 +11,7 @@ protected:
 	Texture			m_Texture;
 	Sprite			m_Sprite;
 	bool			canMove;	//If the sprite can move in the window. Player should be false
+	bool			visible;
 
 public:
 	CSprite();
@@ -21,9 +22,9 @@ public:
 	Sprite *CSprite::Get(void);
 
 	virtual void Move(int speed);
-	//FloatRect getBoundingRect() const;
+	void SetVisible(bool visible);
 
-	bool getCanMoove();
+	//bool getCanMoove();
 };
 
 // ------------------------------------------------------------

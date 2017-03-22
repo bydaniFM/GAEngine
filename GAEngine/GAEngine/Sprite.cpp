@@ -13,6 +13,7 @@ CSprite::CSprite(char *szFileName)
 		m_Sprite.setTexture(m_Texture);
 	}
 	canMove = true;
+	visible = true;
 }
 
 CSprite::CSprite(char *szFileName, bool canMove) {
@@ -20,12 +21,15 @@ CSprite::CSprite(char *szFileName, bool canMove) {
 		m_Sprite.setTexture(m_Texture);
 	}
 	this->canMove = canMove;
+	visible = true;
 }
 
 void CSprite::Draw(RenderWindow *window)
 {
-	window->draw(m_Sprite);
-	GameEntity::Draw(window);
+	if (visible) {
+		window->draw(m_Sprite);
+		GameEntity::Draw(window);
+	}
 }
 
 Sprite *CSprite::Get(void)
@@ -39,9 +43,13 @@ void CSprite::Move(int speed) {
 	GameEntity::Move(speed);
 }
 
-bool CSprite::getCanMoove() {
-	return canMove;
+void CSprite::SetVisible(bool visible) {
+	this->visible = visible;
 }
+
+//bool CSprite::getCanMoove() {
+//	return canMove;
+//}
 
 //FloatRect CSprite::getBoundingRect() const {
 //	return getWorldTransform().transformRect(m_Sprite.getGlobalBounds());
@@ -60,6 +68,7 @@ CAnimatedSprite::CAnimatedSprite(char *szFileName, int nFrames, int nTime, bool 
 	rect = m_Sprite.getTextureRect();
 
 	this->canMove = canMove;
+	visible = true;
 }
 
 void CAnimatedSprite::SetAnimation(int animation) {

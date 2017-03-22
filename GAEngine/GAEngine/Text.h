@@ -5,7 +5,7 @@
 
 class CText : public GameEntity {
 protected:
-	Font Arial;
+	Font f_font;
 	string s_text;
 	Text *t_text;
 public:

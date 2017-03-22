@@ -12,7 +12,8 @@
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
 //bool checkCollision(CSprite a, CSprite b);
 bool checkCollision(CAnimatedSprite *a, CSprite *b);
-Dialogue createDialogue(string route);
+Dialogue StartDialogue(Dialogue myDialogue, char* route);
+Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText);
 
 Font Arial;
 Text debug("Hi", Arial, 12);
@@ -31,6 +32,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene2;
 	GameEntity scene3;
 	GameEntity *activeScene;
+	Dialogue myDialogue;
 
 	//CText textArr[3];
 
@@ -59,7 +61,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CSprite *menu_spr = new CSprite(myReader.Load("menu_spr"));
 	menu.AddChild(menu_spr, "CSprite");
 	menu_spr->Get()->setPosition(64, 80);
-
 	CSprite *button_play_spr = new CSprite(myReader.Load("button_play"));
 	menu.AddChild(button_play_spr, "CSprite");
 	button_play_spr->Get()->setPosition(192, 169);
@@ -71,6 +72,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CSprite *button_exit_spr = new CSprite(myReader.Load("button_exit"));
 	menu.AddChild(button_exit_spr, "CSprite");
 	button_exit_spr->Get()->setPosition(192, 311);
+	//button_exit_spr->SetVisible(false);
 
 	//CText *menuText;
 	//menuText = new CText("Menu"); //myReader.Load("TextAlgo"));
@@ -98,6 +100,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	myInventory->Push(stick);
 	//myInventory->Pop(key);
 
+#pragma endregion
+
+#pragma region Dialogue
+	CSprite *dialogueBox = new CSprite(myReader.Load("DialogueBox"));
+	myDialogue.AddChild(dialogueBox, "CSprite");
+	CSprite *buttonNext = new CSprite(myReader.Load("button_next"));
+	myDialogue.AddChild(buttonNext, "CSprite");
+	buttonNext->Get()->setPosition(530, 390);
+
+	CText *dialogueText = new CText("", Arial, 24);
+	myDialogue.AddText(dialogueText);
+	dialogueText->Get()->setPosition(16, 370);
 #pragma endregion
 
 #pragma region Scene 1
@@ -193,6 +207,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 					credits.active = true;
 				} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
 					window.close();
+				} else if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
+					myDialogue = NextDialogue(myDialogue, dialogueText);
 				}
 			}
 		}
@@ -239,9 +255,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		
 			if (checkCollision(player, npc2)) {
 				//menu.active = true;
+
 				CText *ttext = new CText(myReader.Load("1_01"), Arial, 24);
 				scene1.AddChild(ttext, "CText");
 				ttext->Get()->setFillColor(Color::White);
+
+				myDialogue = StartDialogue(myDialogue, "1_01");
 			}
 
 		}
@@ -267,7 +286,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		window.display();*/
 
 		/*GameEntity scenes[] = { scene1, scene2, scene3, menu, inventory, credits };*/
-		GameEntity scenes[] = { *activeScene, menu, inventory, credits };
+		GameEntity scenes[] = { *activeScene, myDialogue, menu, inventory, credits };
 		window.clear();
 		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
 			if(scenes[i].active)
@@ -317,30 +336,47 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 		return false;
 }
 
-Dialogue createDialogue(string route) {
-	Dialogue *myDialogue = new Dialogue();
-	CText *text;
-	string routeHead = route;
-	route.pop_back();
-	string str;
-	char* cstr;
-	bool condition = false;
-	for (int i = routeHead.back(); !condition; i++) {//(str.c_str(), str.c_str() + str.size() + 1)
-		str = route + to_string(i);
-		cstr = new char[str.length() + 1];
-		strcpy(cstr, str.c_str());
-
-		text = new CText(myReader.Load(route + to_string(i)), Arial, 16);
-		myDialogue->AddText(*text);
-
-		if (myReader.Load(cstr) != NULL)
-			condition = true;
-
-		delete[] cstr;
-	}
-	//delete[] cstr;
-	return *myDialogue;
+Dialogue StartDialogue(Dialogue myDialogue, char* route) {
+	myDialogue.setText(myReader.Load(route), route);
+	myDialogue.active = true;
+	return myDialogue;
 }
+
+Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText) {
+	string route = myDialogue.getRoute();
+	route.back() = route.back() + 1;
+
+	if (myReader.Load(route))
+		myDialogue.setText(myReader.Load(route));//comprobar que no sea problema del texto
+		//dialogueText->Get()->setString(myReader.Load(route));
+	return myDialogue;
+}
+
+//Dialogue createDialogue(string route, GameEntity scene) {
+//	Dialogue *myDialogue = new Dialogue();
+//	CText *text;
+//	string routeHead = route;
+//	route.pop_back();
+//	string str;
+//	char* cstr;
+//	bool condition = false;
+//	for (int i = routeHead.back(); !condition; i++) {//(str.c_str(), str.c_str() + str.size() + 1)
+//		str = route + to_string(i);
+//		cstr = new char[str.length() + 1];
+//		strcpy(cstr, str.c_str());
+//
+//		text = new CText(myReader.Load(route + to_string(i)), Arial, 16);
+//		myDialogue->AddText(*text);
+//
+//		if (myReader.Load(cstr) != NULL)
+//			condition = true;
+//
+//		delete[] cstr;
+//	}
+//	//delete[] cstr;
+//	scene.AddChild(text,"CText");
+//	return *myDialogue;
+//}
 
 //bool checkCollision(CSprite *a, CSprite *b) {
 //	if (a->Get()->getGlobalBounds().intersects(b->Get()->getGlobalBounds()))

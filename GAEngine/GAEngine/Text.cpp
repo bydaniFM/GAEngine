@@ -5,10 +5,10 @@ CText::CText() : GameEntity() {
 
 }
 
-CText::CText(char *szFileName, Font f_font, int size) {
-	Arial = f_font;
+CText::CText(char *szFileName, Font font, int size) {
+	f_font = font;
 	s_text = szFileName;
-	t_text = new Text(szFileName, Arial, size);
+	t_text = new Text(szFileName, f_font, size);
 }
 
 void CText::Draw(RenderWindow *window) {

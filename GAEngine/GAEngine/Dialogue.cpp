@@ -12,9 +12,10 @@ Dialogue::Dialogue() {
 //	t_text = new Text(myReader.Load(name), Arial, 40);
 //}
 
-void Dialogue::AddText(CText text) {
-	*t_Text = text;
-	t_Children.push_back(text);
+void Dialogue::AddText(CText *text) {
+	t_Text = text;
+	t_Children.push_back(*text);
+	this->AddChild(text, "CText");
 }
 
 CText Dialogue::NextLine() {
@@ -25,4 +26,17 @@ CText Dialogue::NextLine() {
 CText Dialogue::getText() {
 	return *t_Text;
 	//for hasta el indice y retunr
+}
+
+void Dialogue::setText(char* text, char* route) {
+	t_Text->Get()->setString(text);
+	this->route = route;
+}
+
+void Dialogue::setText(char* text) {
+	t_Text->Get()->setString(text);
+}
+
+char* Dialogue::getRoute() {
+	return route;
 }
