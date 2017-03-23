@@ -12,6 +12,7 @@ public:
 	CText();
 	CText(char *szFileName, Font f_font, int size);
 	virtual void Draw(RenderWindow *window);
+	void setString(char* string);
 	Text *CText::Get(void);
 };
 #endif //B_CText

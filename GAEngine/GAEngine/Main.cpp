@@ -46,6 +46,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	float backgroundPosY = 0;
 	int speed = 3;
 	int levelLenght = 0;
+	bool npc1_Talked = false;
 
 	RenderWindow window(VideoMode(windowWidth, windowHeight), "GAEngine", Style::Titlebar | Style::Close | !Style::Resize);
 	window.setFramerateLimit(60);
@@ -215,7 +216,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma endregion
 		
 #pragma region Movement
-		if (!menu.active && !inventory.active) {
+		if (!menu.active && !inventory.active && !myDialogue.active) {
 
 			posX = player->Get()->getPosition().x;
 			posY = player->Get()->getPosition().y;
@@ -256,11 +257,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if (checkCollision(player, npc2)) {
 				//menu.active = true;
 
-				CText *ttext = new CText(myReader.Load("1_01"), Arial, 24);
+				/*CText *ttext = new CText(myReader.Load("1_01"), Arial, 24);
 				scene1.AddChild(ttext, "CText");
-				ttext->Get()->setFillColor(Color::White);
-
-				myDialogue = StartDialogue(myDialogue, "1_01");
+				ttext->Get()->setFillColor(Color::White);*/
+				if (!myDialogue.active && !npc1_Talked) {
+					myDialogue = StartDialogue(myDialogue, "1_01");
+					npc1_Talked = true;
+				}
 			}
 
 		}
@@ -337,6 +340,7 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 }
 
 Dialogue StartDialogue(Dialogue myDialogue, char* route) {
+	//CText *cText = new CText(myReader.Load(route), Arial, 24)
 	myDialogue.setText(myReader.Load(route), route);
 	myDialogue.active = true;
 	return myDialogue;
@@ -345,10 +349,13 @@ Dialogue StartDialogue(Dialogue myDialogue, char* route) {
 Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText) {
 	string route = myDialogue.getRoute();
 	route.back() = route.back() + 1;
-
-	if (myReader.Load(route))
-		myDialogue.setText(myReader.Load(route));//comprobar que no sea problema del texto
+	
+	if (myReader.Load(route) != NULL) {
+		myDialogue.setText(myReader.Load(route), route);
 		//dialogueText->Get()->setString(myReader.Load(route));
+	} else {
+		myDialogue.active = false;
+	}
 	return myDialogue;
 }
 

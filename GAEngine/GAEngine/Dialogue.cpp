@@ -2,6 +2,7 @@
 
 Dialogue::Dialogue() {
 	t_Text = NULL;
+	route = "";
 	index = 1;
 };
 
@@ -15,7 +16,7 @@ Dialogue::Dialogue() {
 void Dialogue::AddText(CText *text) {
 	t_Text = text;
 	t_Children.push_back(*text);
-	this->AddChild(text, "CText");
+	this->AddChild(t_Text, "CText");
 }
 
 CText Dialogue::NextLine() {
@@ -28,15 +29,17 @@ CText Dialogue::getText() {
 	//for hasta el indice y retunr
 }
 
-void Dialogue::setText(char* text, char* route) {
-	t_Text->Get()->setString(text);
+void Dialogue::setText(char* text, string route) {
+	//t_Text->Get()->setString(text);
+	t_Text->setString(text);
 	this->route = route;
+	this->AddChild(t_Text, "CText");
 }
 
 void Dialogue::setText(char* text) {
 	t_Text->Get()->setString(text);
 }
 
-char* Dialogue::getRoute() {
+string Dialogue::getRoute() {
 	return route;
 }

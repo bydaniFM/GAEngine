@@ -13,16 +13,17 @@ private:
 	CText *t_Text;
 	vector<CText> t_Children;
 	int index;
-	char* route;
+	string route;
 public:
 	Dialogue();
 	//Dialogue(int index);
 	void AddText(CText *t_text);
 	CText NextLine();
 	CText getText();
-	void setText(char* text, char* route);
+	void setText(char* text, string route);
 	void setText(char* text);
-	char* getRoute();
+	//void setText(CText *cText, char* route);
+	string getRoute();
 };
 
 #endif // !__DIALOGUE

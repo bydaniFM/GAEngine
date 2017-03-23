@@ -16,6 +16,11 @@ void CText::Draw(RenderWindow *window) {
 	GameEntity::Draw(window);
 }
 
+void CText::setString(char* string) {
+	t_text->setString(string);
+	s_text = string;
+}
+
 Text *CText::Get(void) {
 	return(t_text);
 }
