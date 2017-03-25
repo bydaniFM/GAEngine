@@ -215,8 +215,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		}
 #pragma endregion
 		
-#pragma region Movement
 		if (!menu.active && !inventory.active && !myDialogue.active) {
+
+#pragma region Movement
 
 			posX = player->Get()->getPosition().x;
 			posY = player->Get()->getPosition().y;
@@ -254,6 +255,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 		
+#pragma region Collisions
 			if (checkCollision(player, npc2)) {
 				//menu.active = true;
 
@@ -266,7 +268,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				}
 			}
 
+#pragma endregion
+
 		}
+
 #pragma region Draw Scenes
 
 		/*switch (activeScene) {
@@ -301,7 +306,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		window.display();
 
 #pragma endregion
+
 	}
+
 #pragma endregion
 	return 0;
 }
