@@ -52,8 +52,21 @@ CInventory::CInventory() {
 //}
 
 void CInventory::AddItem(CObject *pObject) {
-	inventory.push_back(pObject);
-	numObjects++;
+	if (numObjects < 5) {
+		inventory.push_back(pObject);
+		this->AddChild(pObject->getSprite(), "CSprite");
+
+		int windowW = 640;
+		int windowH = 480;
+		int posX = windowW / 6;
+		int posY = windowH / 2;
+
+		posX = posX + numObjects * (windowW / 7);
+
+		pObject->getSprite()->Get()->setPosition(posX, posY);
+
+		numObjects++;
+	}
 }
 
 void CInventory::DeleteItem(CObject *pObject) {

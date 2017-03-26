@@ -26,18 +26,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	//XMLReader myReader;
 
 	GameEntity menu;
-	GameEntity inventory;
 	GameEntity credits;
 	GameEntity scene1;
 	GameEntity scene2;
 	GameEntity scene3;
 	GameEntity *activeScene;
+	CInventory myInventory;
 	Dialogue myDialogue;
 
-	//CText textArr[3];
+	const int windowWidth = 640;	// In pixels
+	const int windowHeight = 480;
 
-	int windowWidth = 640;	// In pixels
-	int windowHeight = 480;
 	bool isPressed = false;
 	int playerScale = 6;
 	float posX = 0;
@@ -84,22 +83,26 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Inventory
 
 	CSprite *inventory_spr = new CSprite(myReader.Load("inventory_spr"));
-	inventory.AddChild(inventory_spr, "CSprite");
+	myInventory.AddChild(inventory_spr, "CSprite");
 	inventory_spr->Get()->setPosition(64, 80);
-	CInventory *myInventory = new CInventory();
 
-	CSprite *obj_key = new CSprite(myReader.Load("obj_key"));
-	inventory.AddChild(obj_key, "CSprite");
-	obj_key->Get()->setPosition(300, 200);
-	CObject *key = new CObject("Key", true);
-	myInventory->Push(key);
+	CObject *key = new CObject("key", new CSprite(myReader.Load("obj_key")), true);
+	myInventory.AddItem(key);
 
-	CObject *map = new CObject("Map", true);
-	myInventory->Push(map);
+	CObject *map = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(map);
 
-	CObject *stick = new CObject("Stick", true);
-	myInventory->Push(stick);
-	//myInventory->Pop(key);
+	CObject *o3 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(o3);
+
+	CObject *o4 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(o4);
+
+	CObject *o5 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(o5);
+
+	CObject *o6 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(o6);
 
 #pragma endregion
 
@@ -172,10 +175,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 						menu.active = true;
 				}
 				if (event.key.code == Keyboard::I) {
-					if (inventory.active)
-						inventory.active = false;
+					if (myInventory.active)
+						myInventory.active = false;
 					else
-						inventory.active = true;
+						myInventory.active = true;
 				}
 				if (event.key.code == Keyboard::Right) {
 					if(!isPressed)
@@ -215,7 +218,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		}
 #pragma endregion
 		
-		if (!menu.active && !inventory.active && !myDialogue.active) {
+		if (!menu.active && !myInventory.active && !myDialogue.active) {
 
 #pragma region Movement
 
@@ -294,7 +297,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		window.display();*/
 
 		/*GameEntity scenes[] = { scene1, scene2, scene3, menu, inventory, credits };*/
-		GameEntity scenes[] = { *activeScene, myDialogue, menu, inventory, credits };
+		GameEntity scenes[] = { *activeScene, myDialogue, menu, myInventory, credits };
 		window.clear();
 		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
 			if(scenes[i].active)

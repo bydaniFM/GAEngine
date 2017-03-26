@@ -3,7 +3,7 @@
 
 #include "Object.h"
 
-class CInventory {
+class CInventory : public GameEntity {
 private:
 	/*CObject *pFirst;
 	CObject *pLast;*/
