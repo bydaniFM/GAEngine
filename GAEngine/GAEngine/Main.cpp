@@ -20,6 +20,9 @@ Text debug("Hi", Arial, 12);
 
 XMLReader myReader;
 
+SoundBuffer soundBuffer;
+Sound sound;
+
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	Event event;
@@ -55,6 +58,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	Arial.loadFromFile("Resources/Fonts/Arial.ttf");
 	//Text debug("Hi", Arial, 12);
 	debug.setFillColor(Color::Black);
+
+	Music mainTheme;
+	mainTheme.openFromFile("Resources/Audio/mainTheme.wav");
+	mainTheme.setLoop(true);
+	mainTheme.play();
+
+	/*SoundBuffer soundBuffer;
+	Sound sound;*/
+	soundBuffer.loadFromFile("Resources/Audio/beep3.wav");
+	sound.setBuffer(soundBuffer);
 
 #pragma region Menu
 
@@ -104,6 +117,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CObject *o6 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
 	myInventory.AddItem(o6);
 
+	CObject *o7 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(o7);
+
 #pragma endregion
 
 #pragma region Dialogue
@@ -150,6 +166,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	/*CText *ttext = new CText(myReader.Load("1_01"), Arial);
 	scene1.AddChild(ttext, "CText");
 	ttext->Get()->setFillColor(Color::White);*/
+
+#pragma endregion
+
+#pragma region Credits
+
+	CSprite *credits_spr = new CSprite(myReader.Load("credits_spr"));
+	credits.AddChild(credits_spr, "CSprite");
+	credits_spr->Get()->setPosition(64, 80);
+
+	CText *credits_txt = new CText(myReader.Load("credits_txt"), Arial, 24);
+	credits.AddChild(credits_txt, "CText");
+	credits_txt->Get()->setPosition(128, windowHeight / 2);
 
 #pragma endregion
 
@@ -203,16 +231,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
-				if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
-					menu.active = false;
-					activeScene->active = true;
-				} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
-					menu.active = false;
-					credits.active = true;
-				} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
-					window.close();
-				} else if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
-					myDialogue = NextDialogue(myDialogue, dialogueText);
+				if (menu.active) {
+					sound.play();
+					if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
+						menu.active = false;
+						activeScene->active = true;
+					} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
+						menu.active = false;
+						credits.active = true;
+					} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
+						window.close();
+					}
+				}
+				if (myDialogue.active) {
+					if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
+						myDialogue = NextDialogue(myDialogue, dialogueText);
+					}
 				}
 			}
 		}

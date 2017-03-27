@@ -7,6 +7,7 @@
 	<image name="background5">Resources/Textures/background5.png</image>
 	<image name="menu_spr">Resources/Textures/menu_spr.png</image>
 	<image name="inventory_spr">Resources/Textures/inventory_spr.png</image>
+	<image name="credits_spr">Resources/Textures/credits_spr.png</image>
 	<image name="button_play">Resources/Textures/button_play.png</image>
 	<image name="button_credits">Resources/Textures/button_credits.png</image>
 	<image name="button_exit">Resources/Textures/button_exit.png</image>
@@ -17,9 +18,11 @@
 	<image name="button_next">Resources/Textures/button_next.png</image>
 </textures>
 <sounds>
-	<sound name="exSound">assets/exSound.wav</sound>
+	<music name="mainTheme1">Resources/Audio/mainTheme1.wav</music> 
+  	<sound name="beep3">Resources/Audio/beep3.wav</sound> 
 </sounds>
 <texts>
+	<text id="credits_txt">Programmed by Daniel Fernandez\nSFML by ???</text>
 	<text id="1_01">Hello. Is it your first day, isn't it?</text>
 	<text id="1_02">I hope you are getting along with everyone.</text>
 	<text id="1_03">Go talk to the boss, he'll tell you what to do.</text>
