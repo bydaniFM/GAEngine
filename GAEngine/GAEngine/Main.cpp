@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 #include "Scene.h"
 #include "Sprite.h"
@@ -19,6 +19,9 @@ Font Arial;
 Text debug("Hi", Arial, 12);
 
 XMLReader myReader;
+
+SoundBuffer soundBuffer;
+Sound sound;
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
@@ -55,6 +58,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	Arial.loadFromFile("Resources/Fonts/Arial.ttf");
 	//Text debug("Hi", Arial, 12);
 	debug.setFillColor(Color::Black);
+
+	Music mainTheme;
+	mainTheme.openFromFile("Resources/Audio/mainTheme.wav");
+	mainTheme.setLoop(true);
+	mainTheme.play();
+
+	/*SoundBuffer soundBuffer;
+	Sound sound;*/
+	soundBuffer.loadFromFile("Resources/Audio/beep3.wav");
+	sound.setBuffer(soundBuffer);
 
 #pragma region Menu
 
@@ -103,6 +116,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	CObject *o6 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
 	myInventory.AddItem(o6);
+
+	CObject *o7 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
+	myInventory.AddItem(o7);
 
 #pragma endregion
 
@@ -154,8 +170,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma endregion
 
 	menu.active = true;
-	//scene1.active = true;
-
 	activeScene = &scene1;
 
 #pragma region Update Loop
@@ -201,18 +215,22 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				}
 				
 			}
-
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
-				if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
-					menu.active = false;
-					activeScene->active = true;
-				} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
-					menu.active = false;
-					credits.active = true;
-				} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
-					window.close();
-				} else if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
-					myDialogue = NextDialogue(myDialogue, dialogueText);
+				if (menu.active) {
+					if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
+						menu.active = false;
+						activeScene->active = true;
+					} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
+						menu.active = false;
+						credits.active = true;
+					} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
+						window.close();
+					}
+				}
+				if (myDialogue.active) {
+					if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
+						myDialogue = NextDialogue(myDialogue, dialogueText);
+					}
 				}
 			}
 		}
@@ -320,6 +338,7 @@ bool checkButtonClicked(Vector2i mousePosInt, CSprite *button) {
 	Vector2f mousePos((float)mousePosInt.x, (float)mousePosInt.y);
 	if (mousePos.x >= button->Get()->getPosition().x && mousePos.x <= button->Get()->getPosition().x + button->Get()->getTextureRect().width &&
 		mousePos.y >= button->Get()->getPosition().y && mousePos.y <= button->Get()->getPosition().y + button->Get()->getTextureRect().height) {
+		sound.play();
 		return true;
 	} else {
 		return false;

@@ -21,6 +21,7 @@ public:
 	vector<ptr>		spr_Children;
 	ptr				txt_Parent;
 	vector<ptr>		txt_Children;
+	Music			m_music;
 
 	bool			active;
 
@@ -31,6 +32,8 @@ public:
 	void AddChild(ptr, char* type);
 	virtual void Draw(RenderWindow *window);
 	virtual void Move(int speed);
+	/*void setActive(bool active);
+	void setMusic(Music m_music);*/
 };
 
 #endif  // __SCENE

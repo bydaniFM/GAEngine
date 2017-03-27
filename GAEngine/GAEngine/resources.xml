@@ -17,7 +17,8 @@
 	<image name="button_next">Resources/Textures/button_next.png</image>
 </textures>
 <sounds>
-	<sound name="exSound">assets/exSound.wav</sound>
+	<music name="mainTheme1">Resources/Audio/mainTheme1.wav</music>
+	<sound name="beep3">Resources/Audio/beep3.wav</sound>
 </sounds>
 <texts>
 	<text id="1_01">Hello. Is it your first day, isn't it?</text>
