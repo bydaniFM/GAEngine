@@ -36,3 +36,22 @@ void GameEntity::Move(int speed) {
 		(*i)->Move(speed);
 	}
 }
+
+bool GameEntity::getActive() {
+	return active;
+}
+
+void GameEntity::setActive(bool active) {
+	this->active = active;
+	if (m_theme != NULL) {
+		if (active)
+			m_theme->play();
+		else
+			m_theme->stop();
+	}
+}
+
+void GameEntity::addMusic(Music *m_theme) {
+	this->m_theme = m_theme;
+	m_theme->setLoop(true);
+}

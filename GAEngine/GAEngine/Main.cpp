@@ -59,11 +59,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	//Text debug("Hi", Arial, 12);
 	debug.setFillColor(Color::Black);
 
-	Music mainTheme;
-	mainTheme.openFromFile("Resources/Audio/mainTheme.wav");
-	mainTheme.setLoop(true);
-	mainTheme.play();
-
 	/*SoundBuffer soundBuffer;
 	Sound sound;*/
 	soundBuffer.loadFromFile("Resources/Audio/beep3.wav");
@@ -136,6 +131,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma region Scene 1
 
+	Music mainTheme;
+	mainTheme.openFromFile("Resources/Audio/mainTheme.wav");
+	scene1.addMusic(&mainTheme);
+
 	CSprite *background;
 	background = new CSprite(myReader.Load("background5"));
 	//background->Get()->setPosition(-10, 0);
@@ -176,20 +175,26 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	credits_spr->Get()->setPosition(64, 80);
 
 	CText *credits_txt = new CText(myReader.Load("credits_txt"), Arial, 24);
+	credits_txt->Get()->setString(myReader.Load("credits_txt"));
 	credits.AddChild(credits_txt, "CText");
 	credits_txt->Get()->setPosition(128, windowHeight / 2);
 
+	CSprite *button_back_spr = new CSprite(myReader.Load("button_back"));
+	credits.AddChild(button_back_spr, "CSprite");
+	button_back_spr->Get()->setPosition(192, 311);
+
+
 #pragma endregion
 
-	menu.active = true;
-	//scene1.active = true;
-
+	menu.setActive(true);
 	activeScene = &scene1;
 
 #pragma region Update Loop
 
 	while (window.isOpen()){
+
 #pragma region Event management
+
 		while (window.pollEvent(event)){
 			if (event.type == Event::Closed)
 				window.close();
@@ -197,16 +202,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::Escape) {
 					//isPressed = true;
-					if (menu.active)
-						menu.active = false;
+					if (menu.getActive())
+						menu.setActive(false);
 					else
-						menu.active = true;
+						menu.setActive(true);
 				}
 				if (event.key.code == Keyboard::I) {
-					if (myInventory.active)
-						myInventory.active = false;
+					if (myInventory.getActive())
+						myInventory.setActive(false);
 					else
-						myInventory.active = true;
+						myInventory.setActive(true);
 				}
 				if (event.key.code == Keyboard::Right) {
 					if(!isPressed)
@@ -231,28 +236,36 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 			}
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
-				if (menu.active) {
+				if (menu.getActive()) {
 					sound.play();
 					if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
-						menu.active = false;
-						activeScene->active = true;
+						menu.setActive(false);
+						//activeScene->setActive(true);
+						activeScene->setActive(true);
 					} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
-						menu.active = false;
-						credits.active = true;
+						menu.setActive(false);
+						credits.setActive(true);
 					} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
 						window.close();
 					}
 				}
-				if (myDialogue.active) {
+				else if (myDialogue.getActive()) {
 					if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
 						myDialogue = NextDialogue(myDialogue, dialogueText);
+					}
+				}
+				else if (credits.getActive()) {
+					sound.play();
+					if (checkButtonClicked(Mouse::getPosition(window), button_back_spr)) {
+						credits.setActive(false);
+						menu.setActive(true);
 					}
 				}
 			}
 		}
 #pragma endregion
 		
-		if (!menu.active && !myInventory.active && !myDialogue.active) {
+		if (!menu.getActive() && !myInventory.getActive() && !myDialogue.getActive()) {
 
 #pragma region Movement
 
@@ -294,12 +307,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		
 #pragma region Collisions
 			if (checkCollision(player, npc2)) {
-				//menu.active = true;
+				//menu.setActive(true);
 
 				/*CText *ttext = new CText(myReader.Load("1_01"), Arial, 24);
 				scene1.AddChild(ttext, "CText");
 				ttext->Get()->setFillColor(Color::White);*/
-				if (!myDialogue.active && !npc1_Talked) {
+				if (!myDialogue.getActive() && !npc1_Talked) {
 					myDialogue = StartDialogue(myDialogue, "1_01");
 					npc1_Talked = true;
 				}
@@ -334,7 +347,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		GameEntity scenes[] = { *activeScene, myDialogue, menu, myInventory, credits };
 		window.clear();
 		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
-			if(scenes[i].active)
+			if(scenes[i].getActive())
 				scenes[i].Draw(&window);
 		}
 		//window.draw(myDialogue.getText());
@@ -386,7 +399,7 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 Dialogue StartDialogue(Dialogue myDialogue, char* route) {
 	//CText *cText = new CText(myReader.Load(route), Arial, 24)
 	myDialogue.setText(myReader.Load(route), route);
-	myDialogue.active = true;
+	myDialogue.setActive(true);
 	return myDialogue;
 }
 
@@ -398,7 +411,7 @@ Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText) {
 		myDialogue.setText(myReader.Load(route), route);
 		//dialogueText->Get()->setString(myReader.Load(route));
 	} else {
-		myDialogue.active = false;
+		myDialogue.setActive(false);
 	}
 	return myDialogue;
 }

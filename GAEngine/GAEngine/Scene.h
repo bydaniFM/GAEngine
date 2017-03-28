@@ -5,7 +5,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-//#include "Sprite.h"
 
 using namespace sf;
 using namespace std;
@@ -16,21 +15,26 @@ typedef GameEntity*	ptr;
 
 class GameEntity
 {
-public:
+private:
 	ptr				spr_Parent;
 	vector<ptr>		spr_Children;
 	ptr				txt_Parent;
 	vector<ptr>		txt_Children;
-
+	Music			*m_theme;
 	bool			active;
 
 public:
+
+	
+
 	GameEntity();
 
-	//CSprite* GetChildren();
 	void AddChild(ptr, char* type);
 	virtual void Draw(RenderWindow *window);
 	virtual void Move(int speed);
+	bool getActive();
+	void setActive(bool active);
+	void addMusic(Music *m_theme);
 };
 
 #endif  // __SCENE
