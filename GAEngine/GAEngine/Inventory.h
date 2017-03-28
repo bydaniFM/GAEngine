@@ -3,18 +3,21 @@
 
 #include "Object.h"
 
+// Represents the inventory of the player
 class CInventory : public GameEntity {
 private:
-	/*CObject *pFirst;
-	CObject *pLast;*/
+	// Number of objects in the inventory
 	int numObjects;
+	// Vector of CObjects containing the Objects in the inventory
 	vector<CObject*> inventory;
 public:
+	// Default constructor
 	CInventory();
-	/*void Push(CObject *pObject);
-	void Pop(CObject *pObject);*/
+	// Adds an Object to the Vector and positions the sprite in the inventory grid
 	void AddItem(CObject *pObject);
+	// Deletes a specific Object in the Vector
 	void DeleteItem(CObject *pObject);
+	// Returns the number of objects in the inventory
 	int getNumObjects();
 };
 

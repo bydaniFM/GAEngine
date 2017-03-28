@@ -119,6 +119,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CObject *o7 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
 	myInventory.AddItem(o7);
 
+	myInventory.DeleteItem(o3);
+
 #pragma endregion
 
 #pragma region Dialogue1
@@ -299,7 +301,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		}
 #pragma endregion
 		
-		if (!menu.getActive() && !myInventory.getActive() && !dialogue1.getActive()) {
+		if (!menu.getActive() && !myInventory.getActive() && !activeDialogue->getActive()) {
 
 #pragma region Movement
 

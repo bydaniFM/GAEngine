@@ -19,3 +19,7 @@ CSprite* CObject::getSprite() {
 bool CObject::getActive() {
 	return active;
 }
+
+bool CObject::getInInventory() {
+	return inInventory;
+}

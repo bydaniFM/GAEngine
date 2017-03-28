@@ -18,7 +18,6 @@ XMLReader::XMLReader() {
 	}
 }
 
-//El bucle no funciona todavía correctamente
 char* XMLReader::Load(string name) {
 	//xml_node<> *child = node->first_node();
 	//xml_attribute<> *attr; // = node->first_attribute();
