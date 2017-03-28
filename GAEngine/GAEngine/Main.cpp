@@ -35,7 +35,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene3;
 	GameEntity *activeScene;
 	CInventory myInventory;
-	Dialogue myDialogue;
+	Dialogue dialogue1;
+	Dialogue dialogue2;
+	Dialogue *activeDialogue;
 
 	const int windowWidth = 640;	// In pixels
 	const int windowHeight = 480;
@@ -48,7 +50,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	float backgroundPosY = 0;
 	int speed = 3;
 	int levelLenght = 0;
+
 	bool npc1_Talked = false;
+	bool npc2_Talked = false;
 
 	RenderWindow window(VideoMode(windowWidth, windowHeight), "GAEngine", Style::Titlebar | Style::Close | !Style::Resize);
 	window.setFramerateLimit(60);
@@ -117,16 +121,35 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 
-#pragma region Dialogue
+#pragma region Dialogue1
+
 	CSprite *dialogueBox = new CSprite(myReader.Load("DialogueBox"));
-	myDialogue.AddChild(dialogueBox, "CSprite");
+	dialogue1.AddChild(dialogueBox, "CSprite");
 	CSprite *buttonNext = new CSprite(myReader.Load("button_next"));
-	myDialogue.AddChild(buttonNext, "CSprite");
+	dialogue1.AddChild(buttonNext, "CSprite");
 	buttonNext->Get()->setPosition(530, 390);
 
-	CText *dialogueText = new CText("", Arial, 24);
-	myDialogue.AddText(dialogueText);
-	dialogueText->Get()->setPosition(16, 370);
+	CText *dialogueText1 = new CText("", Arial, 24);
+	dialogue1.AddText(dialogueText1);
+	dialogueText1->Get()->setPosition(16, 370);
+	
+#pragma endregion
+
+#pragma region Dialogue2
+
+	dialogue2.AddChild(dialogueBox, "CSprite");
+	CText *dialogueText2 = new CText("", Arial, 24);
+	dialogue2.AddText(dialogueText1);
+	dialogueText2->Get()->setPosition(16, 370);
+
+	CSprite *buttonYes = new CSprite(myReader.Load("button_yes"));
+	dialogue2.AddChild(buttonYes, "CSprite");
+	buttonYes->Get()->setPosition(16, 400);
+
+	CSprite *buttonNo = new CSprite(myReader.Load("button_no"));
+	dialogue2.AddChild(buttonNo, "CSprite");
+	buttonNo->Get()->setPosition(350, 400);
+
 #pragma endregion
 
 #pragma region Scene 1
@@ -188,6 +211,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	menu.setActive(true);
 	activeScene = &scene1;
+	activeDialogue = &dialogue1;
 
 #pragma region Update Loop
 
@@ -249,9 +273,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 						window.close();
 					}
 				}
-				else if (myDialogue.getActive()) {
+				else if (dialogue1.getActive()) {
 					if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
-						myDialogue = NextDialogue(myDialogue, dialogueText);
+						dialogue1 = NextDialogue(dialogue1, dialogueText1);
+					}
+				}
+				else if (dialogue2.getActive()) {
+					if (checkButtonClicked(Mouse::getPosition(window), buttonYes)) {
+						dialogue2.setActive(false);
+						//do something
+					}
+					if (checkButtonClicked(Mouse::getPosition(window), buttonNo)) {
+						dialogue2.setActive(false);
+						//do something different
 					}
 				}
 				else if (credits.getActive()) {
@@ -265,7 +299,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		}
 #pragma endregion
 		
-		if (!menu.getActive() && !myInventory.getActive() && !myDialogue.getActive()) {
+		if (!menu.getActive() && !myInventory.getActive() && !dialogue1.getActive()) {
 
 #pragma region Movement
 
@@ -306,15 +340,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma endregion
 		
 #pragma region Collisions
-			if (checkCollision(player, npc2)) {
-				//menu.setActive(true);
 
-				/*CText *ttext = new CText(myReader.Load("1_01"), Arial, 24);
-				scene1.AddChild(ttext, "CText");
-				ttext->Get()->setFillColor(Color::White);*/
-				if (!myDialogue.getActive() && !npc1_Talked) {
-					myDialogue = StartDialogue(myDialogue, "1_01");
+			if (checkCollision(player, npc1)) {
+				if (!dialogue2.getActive() && !npc1_Talked) {
+					activeDialogue = &dialogue2;
+					dialogue2 = StartDialogue(dialogue2, "2_01");
 					npc1_Talked = true;
+				}
+			}
+			if (checkCollision(player, npc2)) {
+				if (!dialogue1.getActive() && !npc2_Talked) {
+					activeDialogue = &dialogue1;
+					dialogue1 = StartDialogue(dialogue1, "1_01");
+					npc2_Talked = true;
 				}
 			}
 
@@ -344,13 +382,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 		window.display();*/
 
 		/*GameEntity scenes[] = { scene1, scene2, scene3, menu, inventory, credits };*/
-		GameEntity scenes[] = { *activeScene, myDialogue, menu, myInventory, credits };
+		GameEntity scenes[] = { *activeScene, *activeDialogue, menu, myInventory, credits };
 		window.clear();
 		for (int i = 0; i < sizeof(scenes)/sizeof(*scenes); i++) {
 			if(scenes[i].getActive())
 				scenes[i].Draw(&window);
 		}
-		//window.draw(myDialogue.getText());
+		//window.draw(dialogue1.getText());
 		//menuText->Draw(&window);
 		window.draw(debug);
 		window.display();
@@ -397,7 +435,6 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 }
 
 Dialogue StartDialogue(Dialogue myDialogue, char* route) {
-	//CText *cText = new CText(myReader.Load(route), Arial, 24)
 	myDialogue.setText(myReader.Load(route), route);
 	myDialogue.setActive(true);
 	return myDialogue;
