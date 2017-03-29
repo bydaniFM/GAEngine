@@ -17,7 +17,7 @@ private:
 public:
 	// Constructor that opens the document, parses it and closes it.
 	XMLReader();
-	// Receives a char* with the name of the item to find in the xml and returns its content.
+	// Receives a string with the name of the item to find in the xml and returns its content.
 	char* Load(string name);
 };
 

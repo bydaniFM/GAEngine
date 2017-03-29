@@ -19,25 +19,7 @@ XMLReader::XMLReader() {
 }
 
 char* XMLReader::Load(string name) {
-	//xml_node<> *child = node->first_node();
-	//xml_attribute<> *attr; // = node->first_attribute();
-	////char* route = "";
-	////for (xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute()) {
-	//do {
-	//	do {
-	//		if (child->first_attribute() != NULL) {
-	//			attr = child->first_attribute();
-	//			if (attr->value() == name) {
-	//				return child->value();
-	//			}
-	//			child = child->next_sibling();
-	//		}
-	//		child = child->first_node();
-	//	} while (child->next_sibling() != NULL);
-	//	child = child->first_node();
-	//} while (node->next_sibling() != NULL);
 
-	//xml_attribute<> *attr;
 	for (xml_node<> *parent = node; parent != NULL; parent = parent->next_sibling()) {
 		for (xml_node<> *child = parent->first_node(); child != NULL; child = child->next_sibling()) {
 			xml_attribute<> *attr = child->first_attribute();
@@ -47,6 +29,5 @@ char* XMLReader::Load(string name) {
 		}
 
 	}
-	
 	return NULL;
 }

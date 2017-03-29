@@ -19,6 +19,8 @@ public:
 	void DeleteItem(CObject *pObject);
 	// Returns the number of objects in the inventory
 	int getNumObjects();
+	// Returns the number of items found in the vector
+	int searchItem(string name);
 };
 
 #endif // !__INVENTORY

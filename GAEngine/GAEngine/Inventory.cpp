@@ -83,3 +83,12 @@ void CInventory::DeleteItem(CObject *pObject) {
 int CInventory::getNumObjects() {
 	return numObjects;
 }
+
+int CInventory::searchItem(string name) {
+	int i = 0;
+	for (vector<CObject*>::iterator it = inventory.begin(); it < inventory.end(); it++) {
+		if ((*it)->getName() == name)
+			i++;
+	}
+	return i;
+}

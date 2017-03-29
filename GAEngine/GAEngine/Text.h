@@ -16,11 +16,11 @@ public:
 	// Default constructor
 	CText();
 	// Initialices a CText
-	CText(char *szFileName, Font f_font, int size);
+	CText(string s_string, Font f_font, int size);
 	// Draws the Text in the window
 	virtual void Draw(RenderWindow *window);
 	// Changes the sting in the Text
-	void setString(char* string);
+	void setString(string s_string);
 	// Gets the Text object
 	Text *CText::Get(void);
 };

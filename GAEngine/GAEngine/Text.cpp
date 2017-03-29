@@ -5,10 +5,10 @@ CText::CText() : GameEntity() {
 
 }
 
-CText::CText(char *szFileName, Font font, int size) {
+CText::CText(string s_string, Font font, int size) {
 	f_font = font;
-	s_text = szFileName;
-	t_text = new Text(szFileName, f_font, size);
+	s_text = s_string;
+	t_text = new Text(s_string, f_font, size);
 }
 
 void CText::Draw(RenderWindow *window) {
@@ -16,9 +16,9 @@ void CText::Draw(RenderWindow *window) {
 	GameEntity::Draw(window);
 }
 
-void CText::setString(char* string) {
-	t_text->setString(string);
-	s_text = string;
+void CText::setString(string s_string) {
+	t_text->setString(s_string);
+	s_text = s_string;
 }
 
 Text *CText::Get(void) {

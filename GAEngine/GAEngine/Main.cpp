@@ -7,6 +7,7 @@
 #include "Inventory.h"
 #include "Object.h"
 #include "XMLReader.h"
+#include "GameManager.h"
 
 //void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
@@ -26,7 +27,8 @@ Sound sound;
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	Event event;
-	//XMLReader myReader;
+
+	GameManager gameManager;
 
 	GameEntity menu;
 	GameEntity credits;
@@ -142,7 +144,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	dialogue2.AddChild(dialogueBox, "CSprite");
 	CText *dialogueText2 = new CText("", Arial, 24);
 	dialogue2.AddText(dialogueText1);
-	dialogueText2->Get()->setPosition(16, 370);
+	dialogueText2->Get()->setPosition(16, 350);
 
 	CSprite *buttonYes = new CSprite(myReader.Load("button_yes"));
 	dialogue2.AddChild(buttonYes, "CSprite");
@@ -199,14 +201,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	credits.AddChild(credits_spr, "CSprite");
 	credits_spr->Get()->setPosition(64, 80);
 
-	CText *credits_txt = new CText(myReader.Load("credits_txt"), Arial, 24);
-	credits_txt->Get()->setString(myReader.Load("credits_txt"));
+	CText *credits_txt = new CText(myReader.Load("credits_txt"), Arial, 16);
+	//credits_txt->Get()->setString("Something\nsomething");
 	credits.AddChild(credits_txt, "CText");
-	credits_txt->Get()->setPosition(128, windowHeight / 2);
+	credits_txt->Get()->setPosition(128, windowHeight / 3);
 
 	CSprite *button_back_spr = new CSprite(myReader.Load("button_back"));
 	credits.AddChild(button_back_spr, "CSprite");
-	button_back_spr->Get()->setPosition(192, 311);
+	button_back_spr->Get()->setPosition(192, 320);
 
 
 #pragma endregion
@@ -263,36 +265,40 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 			if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left) {
 				if (menu.getActive()) {
-					sound.play();
 					if (checkButtonClicked(Mouse::getPosition(window), button_play_spr)) {
+						sound.play();
 						menu.setActive(false);
-						//activeScene->setActive(true);
 						activeScene->setActive(true);
 					} else if (checkButtonClicked(Mouse::getPosition(window), button_credits_spr)) {
+						sound.play();
 						menu.setActive(false);
 						credits.setActive(true);
 					} else if (checkButtonClicked(Mouse::getPosition(window), button_exit_spr)) {
+						sound.play();
 						window.close();
 					}
 				}
 				else if (dialogue1.getActive()) {
 					if (checkButtonClicked(Mouse::getPosition(window), buttonNext)) {
+						sound.play();
 						dialogue1 = NextDialogue(dialogue1, dialogueText1);
 					}
 				}
 				else if (dialogue2.getActive()) {
 					if (checkButtonClicked(Mouse::getPosition(window), buttonYes)) {
+						sound.play();
 						dialogue2.setActive(false);
-						//do something
+						gameManager.startQuest(1);
 					}
 					if (checkButtonClicked(Mouse::getPosition(window), buttonNo)) {
+						sound.play();
 						dialogue2.setActive(false);
 						//do something different
 					}
 				}
 				else if (credits.getActive()) {
-					sound.play();
 					if (checkButtonClicked(Mouse::getPosition(window), button_back_spr)) {
+						sound.play();
 						credits.setActive(false);
 						menu.setActive(true);
 					}
@@ -361,6 +367,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma endregion
 
 		}
+
+#pragma region Check quests
+
+		//Quest 1
+		if (myInventory.searchItem("paper") == 3) {
+
+		}
+
+#pragma endregion
 
 #pragma region Draw Scenes
 
