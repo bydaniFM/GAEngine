@@ -2,6 +2,6 @@
 
 Quest::Quest(int num) {
 	ID = num;
-	inProgress = false;
+	inProgress = true;
 	finished = false;
 }

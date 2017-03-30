@@ -15,6 +15,7 @@ bool checkButtonClicked(Vector2i mousePos, CSprite *button);
 bool checkCollision(CAnimatedSprite *a, CSprite *b);
 Dialogue StartDialogue(Dialogue myDialogue, char* route);
 Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText);
+int coolDown(int num);
 
 Font Arial;
 Text debug("Hi", Arial, 12);
@@ -52,6 +53,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	float backgroundPosY = 0;
 	int speed = 3;
 	int levelLenght = 0;
+	int temp = 0;
 
 	bool npc1_Talked = false;
 	bool npc2_Talked = false;
@@ -99,12 +101,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Inventory
 
 	CSprite *frame_spr = new CSprite(myReader.Load("obj_frame"));
-
-	CInventory myInventory(frame_spr);
-
 	CSprite *inventory_spr = new CSprite(myReader.Load("inventory_spr"));
-	myInventory.AddChild(inventory_spr, "CSprite");
-	inventory_spr->Get()->setPosition(64, 80);
+
+	CInventory myInventory(inventory_spr, frame_spr);
+
+	/*myInventory.AddChild(inventory_spr, "CSprite");
+	inventory_spr->Get()->setPosition(64, 80);*/
 
 	CObject *key = new CObject("key", new CSprite(myReader.Load("obj_key")), true);
 	myInventory.AddItem(key);/*
@@ -313,11 +315,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 						sound.play();
 						dialogue2.setActive(false);
 						gameManager.startQuest(1);
+						npc1_Talked = true;
 					}
 					if (checkButtonClicked(Mouse::getPosition(window), buttonNo)) {
 						sound.play();
 						dialogue2.setActive(false);
 						//do something different
+						npc1_Talked = true;
 					}
 				}
 				else if (dialogue_pickup.getActive()) {
@@ -400,15 +404,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 				if (!dialogue2.getActive() && !npc1_Talked) {
 					activeDialogue = &dialogue2;
 					dialogue2 = StartDialogue(dialogue2, "2_01");
-					npc1_Talked = true;
 				}
 				if (myInventory.searchItem("paper") == 3) {
 					myInventory.DeleteItem(obj_paper1);
 					myInventory.DeleteItem(obj_paper2);
 					myInventory.DeleteItem(obj_paper3);
-					activeDialogue = &dialogue_pickup;
-					dialogue_pickup = NextDialogue(dialogue_pickup, dialogueText_pickup);
+					activeDialogue = &dialogue2;
+					dialogue2 = NextDialogue(dialogue2, dialogueText2);
+					dialogue2.DeleteChild(buttonYes);
+					dialogue2.DeleteChild(buttonNo);
 					gameManager.endQuest(1);
+					npc1_Talked = true;
 				}
 			}
 			if (checkCollision(player, npc2)) {
@@ -436,6 +442,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 						activeDialogue = &dialogue_pickup;
 						dialogue_pickup = StartDialogue(dialogue_pickup, "3_01");
 						collidingObj = obj_paper3->getSprite();
+					}
+				}
+			}
+
+			// npc1 coolDown
+			if (gameManager.getQuest(1) == NULL || (!gameManager.getQuest(1)->finished && !gameManager.getQuest(1)->inProgress)) {
+				if (npc1_Talked) {
+					if (temp < 300) {
+						temp = coolDown(temp);
+					} else {
+						npc1_Talked = false;
+						temp = 0;
 					}
 				}
 			}
@@ -539,11 +557,16 @@ Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText) {
 	
 	if (myReader.Load(route) != NULL) {
 		myDialogue.setText(myReader.Load(route), route);
-		//dialogueText->Get()->setString(myReader.Load(route));
+		myDialogue.setActive(true);
 	} else {
 		myDialogue.setActive(false);
 	}
 	return myDialogue;
+}
+
+int coolDown(int num) {
+	num++;
+	return num;
 }
 
 //Dialogue createDialogue(string route, GameEntity scene) {

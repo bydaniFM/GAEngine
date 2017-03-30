@@ -6,8 +6,18 @@ CInventory::CInventory() {
 	numObjects = 0;
 }
 
-CInventory::CInventory(CSprite *spr_frame) {
+CInventory::CInventory(CSprite *spr_back, CSprite *spr_frame) {
+	this->spr_back = spr_back;
+	this->AddChild(this->spr_back, "CSprite");
+	this->spr_back->Get()->setPosition(64, 80);
 	this->spr_frame = spr_frame;
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 5; j++) {
+			CSprite *tmp = new CSprite(*spr_frame);
+			this->AddChild(tmp, "CSprite");
+			tmp->Get()->setPosition(640 / 6 + 640 / 7 * j, 480 / 2 - 48 + 48 * 2 * i);
+		}
+	}
 }
 
 //void CInventory::Push(CObject *pObject) {
@@ -70,17 +80,18 @@ void CInventory::AddItem(CObject *pObject) {
 			posX = posX + (numObjects - 5) * (windowW / 7);
 		}
 
-		if (spr_frame != NULL) {
+		/*if (spr_frame != NULL) {
 			CSprite *tmp = new CSprite(*spr_frame);
-			this->AddChild(tmp, "CSprite");
+			pObject->getSprite()->AddChild(tmp, "CSprite");
 			tmp->Get()->setPosition(posX, posY);
-		}
+		}*/
 
 		inventory.push_back(pObject);
 		this->AddChild(pObject->getSprite(), "CSprite");
 		pObject->getSprite()->Get()->setPosition(posX, posY);
 
 		pObject->setInInventory(true);
+
 		numObjects++;
 	}
 }
