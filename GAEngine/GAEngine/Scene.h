@@ -34,6 +34,8 @@ public:
 	GameEntity();
 	// Adds a child to the CSprite or CText vector
 	void AddChild(ptr, char* type);
+	// Deletes a sprite from the scene
+	void DeleteChild(ptr);
 	// Draws the objects in both vectors
 	virtual void Draw(RenderWindow *window);
 	// Moves all the sprites in a scene but the main character 

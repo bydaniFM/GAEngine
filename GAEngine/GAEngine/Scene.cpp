@@ -21,6 +21,12 @@ void GameEntity::AddChild(ptr entity, char* type)
 	}
 }
 
+void GameEntity::DeleteChild(ptr entity) {
+	if (entity == spr_Children.back() || find(spr_Children.begin(), spr_Children.end(), entity) != spr_Children.end()) {
+		spr_Children.erase(find(spr_Children.begin(), spr_Children.end(), entity));
+	}
+}
+
 void GameEntity::Draw(RenderWindow *window)
 {
 	for (vector<ptr>::iterator i = spr_Children.begin(); i < spr_Children.end(); i++) {

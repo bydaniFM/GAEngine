@@ -6,6 +6,10 @@ CInventory::CInventory() {
 	numObjects = 0;
 }
 
+CInventory::CInventory(CSprite *spr_frame) {
+	this->spr_frame = spr_frame;
+}
+
 //void CInventory::Push(CObject *pObject) {
 //	if (pLast == NULL) {
 //		pFirst = pObject;
@@ -58,9 +62,6 @@ void CInventory::AddItem(CObject *pObject) {
 		int posX = windowW / 6;
 		int posY = windowH / 2;
 
-		inventory.push_back(pObject);
-		this->AddChild(pObject->getSprite(), "CSprite");
-
 		if (numObjects < 5) {
 			posY = posY - 48;
 			posX = posX + numObjects * (windowW / 7);
@@ -68,7 +69,18 @@ void CInventory::AddItem(CObject *pObject) {
 			posY = posY + 48;
 			posX = posX + (numObjects - 5) * (windowW / 7);
 		}
+
+		if (spr_frame != NULL) {
+			CSprite *tmp = new CSprite(*spr_frame);
+			this->AddChild(tmp, "CSprite");
+			tmp->Get()->setPosition(posX, posY);
+		}
+
+		inventory.push_back(pObject);
+		this->AddChild(pObject->getSprite(), "CSprite");
 		pObject->getSprite()->Get()->setPosition(posX, posY);
+
+		pObject->setInInventory(true);
 		numObjects++;
 	}
 }
@@ -76,6 +88,7 @@ void CInventory::AddItem(CObject *pObject) {
 void CInventory::DeleteItem(CObject *pObject) {
 	if (pObject == inventory.back() || find(inventory.begin(), inventory.end(), pObject) != inventory.end()) {
 		inventory.erase(find(inventory.begin(), inventory.end(), pObject));
+		this->DeleteChild(pObject->getSprite());
 		numObjects--;
 	}
 }

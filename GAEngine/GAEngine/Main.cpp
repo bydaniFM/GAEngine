@@ -36,9 +36,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	GameEntity scene2;
 	GameEntity scene3;
 	GameEntity *activeScene;
-	CInventory myInventory;
 	Dialogue dialogue1;
 	Dialogue dialogue2;
+	Dialogue dialogue_pickup;
 	Dialogue *activeDialogue;
 
 	const int windowWidth = 640;	// In pixels
@@ -55,6 +55,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	bool npc1_Talked = false;
 	bool npc2_Talked = false;
+
+	CSprite *collidingObj = NULL;
 
 	RenderWindow window(VideoMode(windowWidth, windowHeight), "GAEngine", Style::Titlebar | Style::Close | !Style::Resize);
 	window.setFramerateLimit(60);
@@ -96,12 +98,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma region Inventory
 
+	CSprite *frame_spr = new CSprite(myReader.Load("obj_frame"));
+
+	CInventory myInventory(frame_spr);
+
 	CSprite *inventory_spr = new CSprite(myReader.Load("inventory_spr"));
 	myInventory.AddChild(inventory_spr, "CSprite");
 	inventory_spr->Get()->setPosition(64, 80);
 
 	CObject *key = new CObject("key", new CSprite(myReader.Load("obj_key")), true);
-	myInventory.AddItem(key);
+	myInventory.AddItem(key);/*
 
 	CObject *map = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
 	myInventory.AddItem(map);
@@ -119,9 +125,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	myInventory.AddItem(o6);
 
 	CObject *o7 = new CObject("map", new CSprite(myReader.Load("obj_key")), false);
-	myInventory.AddItem(o7);
-
-	myInventory.DeleteItem(o3);
+	myInventory.AddItem(o7);*/
 
 #pragma endregion
 
@@ -143,8 +147,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 	dialogue2.AddChild(dialogueBox, "CSprite");
 	CText *dialogueText2 = new CText("", Arial, 24);
-	dialogue2.AddText(dialogueText1);
-	dialogueText2->Get()->setPosition(16, 350);
+	dialogue2.AddText(dialogueText2);
+	dialogueText2->Get()->setPosition(16, 320);
 
 	CSprite *buttonYes = new CSprite(myReader.Load("button_yes"));
 	dialogue2.AddChild(buttonYes, "CSprite");
@@ -153,6 +157,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CSprite *buttonNo = new CSprite(myReader.Load("button_no"));
 	dialogue2.AddChild(buttonNo, "CSprite");
 	buttonNo->Get()->setPosition(350, 400);
+
+
+#pragma endregion
+
+#pragma region pickup dialogue
+
+	dialogue_pickup.AddChild(dialogueBox, "CSprite");
+	CText *dialogueText_pickup = new CText("", Arial, 24);
+	dialogue_pickup.AddText(dialogueText_pickup);
+	dialogueText_pickup->Get()->setPosition(16, 320);
+
+	dialogue_pickup.AddChild(buttonYes, "CSprite");
+	dialogue_pickup.AddChild(buttonNo, "CSprite");
 
 #pragma endregion
 
@@ -188,10 +205,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	scene1.AddChild(npc2, "CSprite");
 	npc2->Get()->setPosition(32, windowHeight - npc2->Get()->getTextureRect().height);
 
+	CObject *obj_paper1 = new CObject("paper", new CSprite(myReader.Load("obj_paper")), true);
+	obj_paper1->getSprite()->Get()->setPosition(1000, windowHeight - 70);
+	scene1.AddChild(obj_paper1->getSprite(), "CSprite");
 
-	/*CText *ttext = new CText(myReader.Load("1_01"), Arial);
-	scene1.AddChild(ttext, "CText");
-	ttext->Get()->setFillColor(Color::White);*/
+	CObject *obj_paper2 = new CObject("paper", new CSprite(myReader.Load("obj_paper")), true);
+	obj_paper2->getSprite()->Get()->setPosition(1400, windowHeight - 70);
+	scene1.AddChild(obj_paper2->getSprite(), "CSprite");
+
+	CObject *obj_paper3 = new CObject("paper", new CSprite(myReader.Load("obj_paper")), true);
+	obj_paper3->getSprite()->Get()->setPosition(1900, windowHeight - 70);
+	scene1.AddChild(obj_paper3->getSprite(), "CSprite");
 
 #pragma endregion
 
@@ -296,6 +320,29 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 						//do something different
 					}
 				}
+				else if (dialogue_pickup.getActive()) {
+					if (checkButtonClicked(Mouse::getPosition(window), buttonYes)) {
+						sound.play();
+						dialogue_pickup.setActive(false);
+						if (collidingObj == obj_paper1->getSprite()) {
+							myInventory.AddItem(obj_paper1);
+							scene1.DeleteChild(obj_paper1->getSprite());
+						}
+						if (collidingObj == obj_paper2->getSprite()) {
+							myInventory.AddItem(obj_paper2);
+							scene1.DeleteChild(obj_paper2->getSprite());
+						}
+						if (collidingObj == obj_paper3->getSprite()) {
+							myInventory.AddItem(obj_paper3);
+							scene1.DeleteChild(obj_paper3->getSprite());
+						}
+
+					}
+					if (checkButtonClicked(Mouse::getPosition(window), buttonNo)) {
+						sound.play();
+						dialogue_pickup.setActive(false);
+					}
+				}
 				else if (credits.getActive()) {
 					if (checkButtonClicked(Mouse::getPosition(window), button_back_spr)) {
 						sound.play();
@@ -355,12 +402,41 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 					dialogue2 = StartDialogue(dialogue2, "2_01");
 					npc1_Talked = true;
 				}
+				if (myInventory.searchItem("paper") == 3) {
+					myInventory.DeleteItem(obj_paper1);
+					myInventory.DeleteItem(obj_paper2);
+					myInventory.DeleteItem(obj_paper3);
+					activeDialogue = &dialogue_pickup;
+					dialogue_pickup = NextDialogue(dialogue_pickup, dialogueText_pickup);
+					gameManager.endQuest(1);
+				}
 			}
 			if (checkCollision(player, npc2)) {
 				if (!dialogue1.getActive() && !npc2_Talked) {
 					activeDialogue = &dialogue1;
 					dialogue1 = StartDialogue(dialogue1, "1_01");
 					npc2_Talked = true;
+				}
+			}
+
+			//Quest 1
+			if (gameManager.getQuest(1) != NULL){
+				if (gameManager.getQuest(1)->inProgress = true) {
+					if (checkCollision(player, obj_paper1->getSprite()) && !obj_paper1->getInInventory()) {
+						activeDialogue = &dialogue_pickup;
+						dialogue_pickup = StartDialogue(dialogue_pickup, "3_01");
+						collidingObj = obj_paper1->getSprite();
+					}
+					if (checkCollision(player, obj_paper2->getSprite()) && !obj_paper2->getInInventory()) {
+						activeDialogue = &dialogue_pickup;
+						dialogue_pickup = StartDialogue(dialogue_pickup, "3_01");
+						collidingObj = obj_paper2->getSprite();
+					}
+					if (checkCollision(player, obj_paper3->getSprite()) && !obj_paper3->getInInventory()) {
+						activeDialogue = &dialogue_pickup;
+						dialogue_pickup = StartDialogue(dialogue_pickup, "3_01");
+						collidingObj = obj_paper3->getSprite();
+					}
 				}
 			}
 
@@ -371,9 +447,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 #pragma region Check quests
 
 		//Quest 1
-		if (myInventory.searchItem("paper") == 3) {
+		/*if (myInventory.searchItem("paper") == 3) {
 
-		}
+		}*/
 
 #pragma endregion
 

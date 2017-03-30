@@ -23,3 +23,7 @@ bool CObject::getActive() {
 bool CObject::getInInventory() {
 	return inInventory;
 }
+
+void CObject::setInInventory(bool value) {
+	inInventory = value;
+}

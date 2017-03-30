@@ -16,5 +16,6 @@ public:
 	GameManager();
 	void startQuest(int num);
 	void endQuest(int num);
+	Quest* getQuest(int num);
 };
 #endif // !__GAMEMANAGER

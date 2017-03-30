@@ -30,6 +30,8 @@ public:
 	bool getActive();
 	// Gets the inInventory variable of the Object
 	bool getInInventory();
+	// Sets inInventory value
+	void setInInventory(bool value);
 };
 
 #endif // !__Object
