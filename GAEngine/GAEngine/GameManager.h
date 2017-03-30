@@ -9,13 +9,18 @@
 
 class GameManager {
 private:
+	// Not in use. Can be useful when adding new mechanics
 	int points;
-	bool quest1;
+	// Vector of quests
 	vector<Quest*> myQuests;
 public:
+	// Default constructor
 	GameManager();
+	// Initializes a new quest
 	void startQuest(int num);
+	// Ends and deletes a finished or dropped quest
 	void endQuest(int num);
+	// Finds a quest by ID and returns it
 	Quest* getQuest(int num);
 };
 #endif // !__GAMEMANAGER

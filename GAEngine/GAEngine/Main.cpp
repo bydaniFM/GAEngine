@@ -9,9 +9,8 @@
 #include "XMLReader.h"
 #include "GameManager.h"
 
-//void RefreshWindow(RenderWindow& window, GameEntity scene, Text text);
+// Functions declaration
 bool checkButtonClicked(Vector2i mousePos, CSprite *button);
-//bool checkCollision(CSprite a, CSprite b);
 bool checkCollision(CAnimatedSprite *a, CSprite *b);
 Dialogue StartDialogue(Dialogue myDialogue, char* route);
 Dialogue NextDialogue(Dialogue myDialogue, CText *dialogueText);
@@ -200,19 +199,19 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 	CSprite *npc1;
 	npc1 = new CSprite(myReader.Load("npc1"));
 	scene1.AddChild(npc1, "CSprite");
-	npc1->Get()->setPosition(600, windowHeight - npc1->Get()->getTextureRect().height);
+	npc1->Get()->setPosition(900, windowHeight - npc1->Get()->getTextureRect().height);
 
 	CSprite *npc2;
 	npc2 = new CSprite(myReader.Load("npc1"));
 	scene1.AddChild(npc2, "CSprite");
-	npc2->Get()->setPosition(32, windowHeight - npc2->Get()->getTextureRect().height);
+	npc2->Get()->setPosition(600, windowHeight - npc2->Get()->getTextureRect().height);
 
 	CObject *obj_paper1 = new CObject("paper", new CSprite(myReader.Load("obj_paper")), true);
-	obj_paper1->getSprite()->Get()->setPosition(1000, windowHeight - 70);
+	obj_paper1->getSprite()->Get()->setPosition(1300, windowHeight - 70);
 	scene1.AddChild(obj_paper1->getSprite(), "CSprite");
 
 	CObject *obj_paper2 = new CObject("paper", new CSprite(myReader.Load("obj_paper")), true);
-	obj_paper2->getSprite()->Get()->setPosition(1400, windowHeight - 70);
+	obj_paper2->getSprite()->Get()->setPosition(1600, windowHeight - 70);
 	scene1.AddChild(obj_paper2->getSprite(), "CSprite");
 
 	CObject *obj_paper3 = new CObject("paper", new CSprite(myReader.Load("obj_paper")), true);
@@ -239,6 +238,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR, int){
 
 #pragma endregion
 
+	//Active scenes at the start of te game
 	menu.setActive(true);
 	activeScene = &scene1;
 	activeDialogue = &dialogue1;
@@ -536,10 +536,17 @@ bool checkCollision(CAnimatedSprite *a, CSprite *b) {
 	FloatRect rectA = a->Get()->getGlobalBounds();
 	FloatRect rectB = b->Get()->getGlobalBounds();
 
-	debug.setString("\nPos A = " + std::to_string(rectA.left) + "\n" +
-		"Pos B = " + std::to_string(rectB.left - rectB.width) + "\n");
+	int borderALeft = a->Get()->getPosition().x - rectA.width / 16;// rectA.left - rectA.width / 16;
+	int borderARight = a->Get()->getPosition().x + rectA.width / 16;
+	int borderBLeft = b->Get()->getPosition().x;
+	int borderBRight = b->Get()->getPosition().x + rectB.width;
 
-	if (rectA.left >= rectB.left - rectB.width && rectA.left <= rectB.left)
+	debug.setString("\nborderALeft = " + to_string(borderALeft) + "\n" +
+		"borderARight = " + to_string(borderARight) + "\n" + 
+		"borderBLeft = " + to_string(borderBLeft) + "\n" +
+		"borderBRight = " + to_string(borderBRight));
+
+	if (borderALeft <= borderBRight && borderARight >= borderBLeft)	//if (rectA.left >= rectB.left - rectB.width && rectA.left <= rectB.left)
 		return true;
 	else
 		return false;

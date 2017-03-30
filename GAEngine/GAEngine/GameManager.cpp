@@ -2,7 +2,6 @@
 
 GameManager::GameManager() {
 	points = 0;
-	quest1 = false;
 }
 
 void GameManager::startQuest(int num) {
