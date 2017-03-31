@@ -1,8 +1,6 @@
 #include "Inventory.h"
 
 CInventory::CInventory() {
-	/*pFirst = NULL;
-	pLast = NULL;*/
 	numObjects = 0;
 }
 
@@ -79,13 +77,6 @@ void CInventory::AddItem(CObject *pObject) {
 			posY = posY + 48;
 			posX = posX + (numObjects - 5) * (windowW / 7);
 		}
-
-		/*if (spr_frame != NULL) {
-			CSprite *tmp = new CSprite(*spr_frame);
-			pObject->getSprite()->AddChild(tmp, "CSprite");
-			tmp->Get()->setPosition(posX, posY);
-		}*/
-
 		inventory.push_back(pObject);
 		this->AddChild(pObject->getSprite(), "CSprite");
 		pObject->getSprite()->Get()->setPosition(posX, posY);

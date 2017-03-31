@@ -13,8 +13,7 @@ class GameEntity;
 
 typedef GameEntity*	ptr;
 
-class GameEntity
-{
+class GameEntity {
 private:
 	// Pointer to the last CSprite added to the scene
 	ptr				spr_Parent;

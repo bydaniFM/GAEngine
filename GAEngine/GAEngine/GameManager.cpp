@@ -5,13 +5,6 @@ GameManager::GameManager() {
 }
 
 void GameManager::startQuest(int num) {
-	/*switch (num) {
-	case 1:
-		Quest *quest1 = new Quest(num);
-		myQuests.push_back(quest1);
-	default:
-		break;
-	}*/
 	myQuests.push_back(new Quest(num));
 }
 

@@ -20,6 +20,3 @@ public:
 	// Receives a string with the name of the item to find in the xml and returns its content.
 	char* Load(string name);
 };
-
-
-//Constructor that opens the document, parses it and closes it.

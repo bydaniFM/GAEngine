@@ -1,9 +1,6 @@
 #ifndef __DIALOGUE
 #define __DIALOGUE
 
-//#include <windows.h>
-//#include <iostream>
-//#include <SFML/Graphics.hpp>
 #include "Scene.h"
 #include "Sprite.h"
 #include "Text.h"

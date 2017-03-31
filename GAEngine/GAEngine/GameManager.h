@@ -5,8 +5,6 @@
 #include "Quest.h"
 #include "Scene.h"
 
-//using namespace std;
-
 class GameManager {
 private:
 	// Not in use. Can be useful when adding new mechanics

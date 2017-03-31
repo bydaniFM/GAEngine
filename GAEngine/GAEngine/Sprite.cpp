@@ -3,12 +3,10 @@
 
 // -------------------------------------------------------
 
-CSprite::CSprite() : GameEntity()
-{
+CSprite::CSprite() : GameEntity() {
 }
 
-CSprite::CSprite(char *szFileName)
-{
+CSprite::CSprite(char *szFileName) {
 	if (m_Texture.loadFromFile(szFileName)) {
 		m_Sprite.setTexture(m_Texture);
 	}
@@ -24,16 +22,14 @@ CSprite::CSprite(char *szFileName, bool canMove) {
 	visible = true;
 }
 
-void CSprite::Draw(RenderWindow *window)
-{
+void CSprite::Draw(RenderWindow *window) {
 	if (visible) {
 		window->draw(m_Sprite);
 		GameEntity::Draw(window);
 	}
 }
 
-Sprite *CSprite::Get(void)
-{
+Sprite *CSprite::Get(void) {
 	return(&m_Sprite);
 }
 
@@ -77,10 +73,8 @@ void CAnimatedSprite::SetAnimation(int animation) {
 
 	}else if (animation == 1){
 		m_Sprite.setScale(m_nScale, m_nScale);
-		//m_Sprite.setPosition(m_Sprite.getPosition() + Vector2f(m_Sprite.getTextureRect().width, 0));
 	} else if (animation == 2) {
 		m_Sprite.setScale(-m_nScale, m_nScale);
-		//m_Sprite.setPosition(m_Sprite.getPosition() + Vector2f(m_Sprite.getTextureRect().width, 0));
 	}
 }
 
@@ -114,15 +108,6 @@ void CAnimatedSprite::Draw(RenderWindow *window)
 	m_Sprite.setTextureRect(IntRect(m_nIndex*width, 0, rect.height, width));
 
 	if (m_nAnimation != 0) {
-		/*if (m_nAnimation == 1) {
-			m_Sprite.setScale(1, 1);
-			m_Sprite.setPosition(m_Sprite.getPosition() + Vector2f(m_Sprite.getTextureRect().width, 0));
-		}
-		if (m_nAnimation == 2) {
-			m_Sprite.setScale(-1, 1);
-			m_Sprite.setPosition(m_Sprite.getPosition() + Vector2f(m_Sprite.getTextureRect().width, 0));
-		}*/
-		
 		if (timer.getElapsedTime().asMilliseconds() > m_nTime) {
 			m_nIndex++;
 			if (m_nIndex == m_nFrames) m_nIndex = 0;

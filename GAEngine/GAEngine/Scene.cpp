@@ -4,14 +4,12 @@
 using namespace sf;
 using namespace std;
 
-GameEntity::GameEntity()
-{
+GameEntity::GameEntity() {
 	spr_Parent = NULL;
 	active = false;
 }
 
-void GameEntity::AddChild(ptr entity, char* type)
-{
+void GameEntity::AddChild(ptr entity, char* type) {
 	if (type == "CSprite") {
 		spr_Children.push_back(entity);
 		entity->spr_Parent = this;
@@ -27,8 +25,7 @@ void GameEntity::DeleteChild(ptr entity) {
 	}
 }
 
-void GameEntity::Draw(RenderWindow *window)
-{
+void GameEntity::Draw(RenderWindow *window) {
 	for (vector<ptr>::iterator i = spr_Children.begin(); i < spr_Children.end(); i++) {
 		(*i)->Draw(window);
 	}
